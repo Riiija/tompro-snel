@@ -1,0 +1,1360 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Moulinette TomPro → SNEL</title>
+  <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Segoe UI Variable', 'Segoe UI', system-ui, sans-serif;
+         font-size: 13px; background: #F3F3F3; height: 100vh; overflow: hidden; }
+  ::-webkit-scrollbar { width: 6px; height: 6px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.18); border-radius: 10px; }
+
+  /* SHELL */
+  .shell { display: flex; flex-direction: column; height: 100vh; background: #F3F3F3; }
+
+  /* MENUBAR GLOBAL */
+  .global-menu { height: 32px; background: #FAFAFA; border-bottom: 1px solid rgba(0,0,0,0.1);
+    display: flex; align-items: center; padding: 0 10px; gap: 2px; flex-shrink: 0; position: relative; z-index: 200; }
+  .global-menu-brand { display: flex; align-items: center; gap: 7px; padding-right: 14px;
+    margin-right: 8px; border-right: 1px solid rgba(0,0,0,0.1); font-size: 12px; font-weight: 600; color: #1C1C1C; }
+  .menu-btn { height: 26px; padding: 0 10px; border-radius: 4px; border: none;
+    background: transparent; cursor: pointer; font-size: 12px; color: #1C1C1C;
+    display: flex; align-items: center; font-family: inherit; }
+  .menu-btn:hover, .menu-btn.open { background: rgba(0,0,0,0.06); }
+  .dropdown { position: absolute; top: 100%; left: 0; background: #FFFFFF; border-radius: 8px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.16), inset 0 0 0 1px rgba(0,0,0,0.08);
+    min-width: 240px; padding: 4px; z-index: 500; }
+  .dd-item { height: 32px; padding: 0 14px; border-radius: 4px; border: none;
+    background: transparent; cursor: pointer; font-size: 12px; color: #1C1C1C;
+    display: flex; align-items: center; gap: 8px; width: 100%; text-align: left; font-family: inherit; }
+  .dd-item:hover { background: rgba(0,0,0,0.05); }
+  .dd-sep { height: 1px; background: rgba(0,0,0,0.08); margin: 3px 8px; }
+
+  /* DESKTOP MDI */
+  .desktop { flex: 1; position: relative; overflow: hidden; background: #EBEBEB; }
+  .desktop-hint { position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%);
+    text-align: center; color: rgba(0,0,0,0.28); pointer-events: none; user-select: none; }
+  .desktop-hint .ico { font-size: 40px; margin-bottom: 10px; }
+  .desktop-hint p { font-size: 13px; }
+
+  /* MDI WINDOW */
+  .mdi-win { position: absolute; background: #FFFFFF; border-radius: 12px; display: flex;
+    flex-direction: column; overflow: hidden; min-width: 360px; min-height: 260px;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.1), inset 0 0 0 1px rgba(0,0,0,0.09); transition: box-shadow 0.15s; }
+  .mdi-win.focused { box-shadow: 0 12px 40px rgba(0,0,0,0.16), inset 0 0 0 1px rgba(0,0,0,0.11); z-index: 10 !important; }
+
+  /* TITLEBAR */
+  .titlebar { height: 36px; background: #FAFAFA; display: flex; align-items: center;
+    padding: 0 0 0 12px; gap: 8px; flex-shrink: 0; border-radius: 12px 12px 0 0;
+    border-bottom: 1px solid rgba(0,0,0,0.07); cursor: move; user-select: none; }
+  .titlebar-icon { font-size: 14px; flex-shrink: 0; }
+  .titlebar-text { font-size: 12px; font-weight: 500; color: #1C1C1C; flex: 1;
+    overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .chrome-btns { display: flex; margin-left: auto; flex-shrink: 0; }
+  .chrome-btn { width: 46px; height: 36px; border: none; background: transparent; cursor: pointer;
+    display: flex; align-items: center; justify-content: center; font-size: 10px;
+    color: #1C1C1C; transition: background 0.1s; border-radius: 0; }
+  .chrome-btn:last-child { border-radius: 0 12px 0 0; }
+  .chrome-btn:hover { background: rgba(0,0,0,0.07); }
+  .chrome-btn.close:hover { background: #C42B1C; color: #fff; }
+
+  /* TOOLBAR */
+  .toolbar { height: 34px; background: #FAFAFA; border-bottom: 1px solid rgba(0,0,0,0.07);
+    display: flex; align-items: center; padding: 0 8px; gap: 2px; flex-shrink: 0; flex-wrap: wrap; }
+  .tb-btn { height: 26px; padding: 0 10px; border-radius: 4px; border: 1px solid transparent;
+    background: transparent; cursor: pointer; font-size: 11px; color: #1C1C1C;
+    display: inline-flex; align-items: center; gap: 4px; font-family: inherit; white-space: nowrap; }
+  .tb-btn:hover { background: rgba(0,0,0,0.05); border-color: rgba(0,0,0,0.08); }
+  .tb-btn:disabled { opacity: 0.4; cursor: default; }
+  .tb-sep { width: 1px; height: 18px; background: rgba(0,0,0,0.1); margin: 0 3px; flex-shrink: 0; }
+
+  /* CONTENT */
+  .content { flex: 1; overflow: auto; padding: 14px 16px; background: #F9F9F9; }
+
+  /* STATUSBAR */
+  .statusbar { height: 24px; background: #FAFAFA; border-top: 1px solid rgba(0,0,0,0.07);
+    display: flex; align-items: center; padding: 0 12px; flex-shrink: 0; border-radius: 0 0 12px 12px; }
+  .sb-item { font-size: 11px; color: #5D5D5D; padding-right: 12px; margin-right: 12px;
+    border-right: 1px solid rgba(0,0,0,0.1); white-space: nowrap; overflow: hidden;
+    max-width: 220px; text-overflow: ellipsis; }
+  .sb-item:last-child { border-right: none; }
+
+  /* TASKBAR */
+  .taskbar { height: 48px; background: rgba(243,243,243,0.96); border-top: 1px solid rgba(0,0,0,0.1);
+    display: flex; align-items: center; padding: 0 12px; gap: 4px; flex-shrink: 0; }
+  .task-btn { height: 36px; padding: 0 10px 0 10px; border-radius: 6px; border: none;
+    background: transparent; cursor: pointer; font-size: 11px; color: #1C1C1C;
+    display: flex; align-items: center; gap: 6px; max-width: 180px; transition: background 0.1s; }
+  .task-btn:hover { background: rgba(0,0,0,0.06); }
+  .task-btn.active { background: rgba(0,0,0,0.08); }
+  .task-btn-label { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 110px; }
+  .task-close { font-size: 10px; color: #888; border: none; background: transparent;
+    cursor: pointer; padding: 2px 4px; border-radius: 3px; flex-shrink: 0; }
+  .task-close:hover { background: rgba(196,43,28,0.12); color: #C42B1C; }
+  .taskbar-clock { margin-left: auto; font-size: 11px; color: #5D5D5D; white-space: nowrap; }
+
+  /* FORM CONTROLS */
+  .group { border: 1px solid rgba(0,0,0,0.1); border-radius: 8px; padding: 18px 14px 14px;
+    margin-bottom: 12px; position: relative; background: #FFFFFF; }
+  .group-title { position: absolute; top: -9px; left: 12px; background: #FFFFFF;
+    padding: 0 6px; font-size: 11px; font-weight: 600; color: #5D5D5D; }
+  .section-bar { background: rgba(0,95,184,0.07); border-left: 3px solid #005FB8;
+    padding: 6px 12px; margin: -14px -16px 14px; display: flex; align-items: center;
+    gap: 8px; font-size: 12px; font-weight: 600; color: #1C1C1C; }
+  .alert { border-radius: 6px; padding: 8px 12px; font-size: 12px;
+    display: flex; align-items: flex-start; gap: 8px; margin-bottom: 10px; }
+  .alert.info { background: rgba(0,120,212,0.07); border: 1px solid rgba(0,120,212,0.15); color: #003E7E; }
+  .alert.warn { background: rgba(255,185,0,0.1); border: 1px solid rgba(255,185,0,0.3); color: #7A4E00; }
+  .alert.err  { background: rgba(196,43,28,0.07); border: 1px solid rgba(196,43,28,0.2); color: #710F0F; }
+  .alert.ok   { background: rgba(16,124,16,0.07);  border: 1px solid rgba(16,124,16,0.2);  color: #0C4B0C; }
+  .w11-label { font-size: 12px; color: #1C1C1C; display: block; margin-bottom: 3px; }
+  .w11-input { height: 28px; border: 1px solid rgba(0,0,0,0.22); border-radius: 4px;
+    background: #FFFFFF; font-size: 12px; padding: 0 8px; color: #1C1C1C;
+    font-family: inherit; outline: none; transition: border-color 0.15s, box-shadow 0.15s; }
+  .w11-input:focus { border-color: #005FB8; box-shadow: 0 0 0 1px #005FB8; }
+  .w11-input:read-only { background: #F5F5F5; color: #888; }
+  .w11-select { height: 28px; border: 1px solid rgba(0,0,0,0.22); border-radius: 4px;
+    background: #FFFFFF; font-size: 12px; padding: 0 24px 0 8px; color: #1C1C1C;
+    font-family: inherit; outline: none; cursor: pointer; appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%23666'/%3E%3C/svg%3E");
+    background-repeat: no-repeat; background-position: right 8px center;
+    transition: border-color 0.15s; }
+  .w11-select:focus { border-color: #005FB8; box-shadow: 0 0 0 1px #005FB8; outline: none; }
+  .w11-btn { height: 28px; padding: 0 14px; border-radius: 4px; border: 1px solid rgba(0,0,0,0.14);
+    background: #FBFBFB; cursor: pointer; font-size: 12px; color: #1C1C1C;
+    font-family: inherit; display: inline-flex; align-items: center; gap: 5px;
+    transition: background 0.1s; white-space: nowrap; }
+  .w11-btn:hover { background: #F0F0F0; }
+  .w11-btn:active { background: #E8E8E8; }
+  .w11-btn:disabled { opacity: 0.4; cursor: default; }
+  .w11-btn.primary { background: #005FB8; color: #fff; border-color: #005FB8; }
+  .w11-btn.primary:hover { background: #0067C0; }
+  .w11-btn.danger  { background: #C42B1C; color: #fff; border-color: #C42B1C; }
+  .w11-btn.success { background: #107C10; color: #fff; border-color: #107C10; }
+
+  /* GRID */
+  .grid-wrap { overflow: auto; max-height: 190px; border: 1px solid rgba(0,0,0,0.1); border-radius: 6px; }
+  .w11-grid { width: 100%; border-collapse: collapse; font-size: 11px; }
+  .w11-grid th { background: #F5F5F5; border-bottom: 1px solid rgba(0,0,0,0.1);
+    padding: 5px 10px; text-align: left; font-weight: 600; font-size: 10.5px;
+    color: #5D5D5D; white-space: nowrap; position: sticky; top: 0; }
+  .w11-grid td { border-bottom: 1px solid rgba(0,0,0,0.05); padding: 4px 10px;
+    color: #1C1C1C; white-space: nowrap; overflow: hidden; max-width: 160px; text-overflow: ellipsis; }
+  .w11-grid tr:hover td { background: rgba(0,95,184,0.04); }
+  .w11-grid tr.sel td { background: rgba(0,95,184,0.1); }
+
+  /* BADGE */
+  .badge { display: inline-block; font-size: 10px; font-weight: 600; border-radius: 3px; padding: 1px 6px; }
+
+  /* MODAL */
+  .modal-bg { position: absolute; inset: 0; background: rgba(0,0,0,0.3);
+    display: flex; align-items: center; justify-content: center; z-index: 400; border-radius: 12px; }
+  .modal-box { background: #FFFFFF; border-radius: 10px; width: 460px; max-width: 92%;
+    box-shadow: 0 16px 48px rgba(0,0,0,0.2), inset 0 0 0 1px rgba(0,0,0,0.09); overflow: hidden; }
+  .modal-title { background: #FAFAFA; border-bottom: 1px solid rgba(0,0,0,0.08);
+    padding: 12px 16px; font-size: 13px; font-weight: 600; color: #1C1C1C;
+    display: flex; align-items: center; gap: 8px; }
+  .modal-body { padding: 16px; }
+  .modal-footer { padding: 12px 16px; border-top: 1px solid rgba(0,0,0,0.08);
+    display: flex; justify-content: flex-end; gap: 8px; background: #FAFAFA; }
+
+  /* MISC */
+  .form-row { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
+  .form-row label { font-size: 12px; color: #1C1C1C; min-width: 0; text-align: right; flex-shrink: 0; }
+  .progress-wrap { background: #E0E0E0; border-radius: 100px; height: 8px; overflow: hidden; }
+  .progress-bar { height: 100%; background: #005FB8; border-radius: 100px; transition: width 0.3s; }
+  .log-console { background: #1E1E1E; border-radius: 6px; padding: 8px 12px;
+    max-height: 80px; overflow: auto; margin-bottom: 10px; }
+  .log-line { font-family: Consolas, 'Courier New', monospace; font-size: 10px; line-height: 1.6; }
+  .log-info { color: #9CDCFE; } .log-warn { color: #DCDCAA; }
+  .log-ok { color: #4EC994; } .log-err { color: #F48771; }
+  .stat-row { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 10px; }
+  .stat-card { background: #F5F5F5; border-radius: 6px; padding: 6px 12px; }
+  .stat-card strong { display: block; font-size: 13px; color: #1C1C1C; }
+  .stat-card span { font-size: 10px; color: #5D5D5D; }
+  .extraction-box { background: rgba(0,95,184,0.05); border: 1px solid rgba(0,95,184,0.15);
+    border-radius: 6px; padding: 10px 14px; }
+  .login-shell { display: flex; align-items: center; justify-content: center;
+    height: 100vh; background: linear-gradient(135deg,#1E3A5C 0%,#0D2238 100%); }
+  .login-card { width: 400px; background: #FFFFFF; border-radius: 12px;
+    box-shadow: 0 24px 64px rgba(0,0,0,0.35); overflow: hidden; }
+  .login-header { background: #FAFAFA; border-bottom: 1px solid rgba(0,0,0,0.08);
+    padding: 10px 16px; display: flex; align-items: center; justify-content: space-between;
+    border-radius: 12px 12px 0 0; }
+  .login-body { padding: 28px 30px 22px; }
+  .login-footer { background: #FAFAFA; border-top: 1px solid rgba(0,0,0,0.07);
+    padding: 8px 16px; text-align: center; font-size: 10px; color: #999;
+    border-radius: 0 0 12px 12px; }
+  .full-input { display: block; width: 100%; }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+  <script type="text/babel" data-presets="react">
+const { useState, useRef, useEffect, useCallback } = React;
+
+
+/* ══════════════════════════════════════════════
+   DONNÉES INITIALES
+══════════════════════════════════════════════ */
+const INIT = {
+  users: [
+    { id: 1, login: "administrateur", nom: "Administrateur Système", role: "ADMIN", actif: true, mdp: "admin123" },
+    { id: 2, login: "operateur1", nom: "Jean KALONJI", role: "OPERATEUR", actif: true, mdp: "op1" },
+  ],
+  projets: [
+    { id: 1, code: "PROJ001", libelle: "Electrification Kinshasa Nord" },
+    { id: 2, code: "PROJ002", libelle: "Réhabilitation Inga II" },
+    { id: 3, code: "PROJ003", libelle: "Extension Réseau Goma" },
+  ],
+  exercices: [
+    { id: 1, code: "2024", libelle: "Exercice 2024", dateDebut: "2024-01-01", dateFin: "2024-12-31", statut: "Clôturé" },
+    { id: 2, code: "2025", libelle: "Exercice 2025", dateDebut: "2025-01-01", dateFin: "2025-12-31", statut: "En cours" },
+    { id: 3, code: "2026", libelle: "Exercice 2026", dateDebut: "2026-01-01", dateFin: "2026-12-31", statut: "Futur" },
+  ],
+  ccompteg: [
+    { id: 1, compteTompro: "601100", libelleTompro: "Achats matières premières", compteSnell: "60110000000", libelleSnell: "Achats mat. — SNEL" },
+    { id: 2, compteTompro: "401000", libelleTompro: "Fournisseurs",              compteSnell: "40100000000", libelleSnell: "Fournisseurs locaux" },
+    { id: 3, compteTompro: "512000", libelleTompro: "Banques",                   compteSnell: "51200000000", libelleSnell: "Compte bancaire" },
+    { id: 4, compteTompro: "701000", libelleTompro: "Ventes produits finis",     compteSnell: "70100000000", libelleSnell: "Ventes — électricité" },
+  ],
+  cjournal: [
+    { id: 1, code: "AC", libelle: "Journal des Achats" },
+    { id: 2, code: "VT", libelle: "Journal des Ventes" },
+    { id: 3, code: "BQ", libelle: "Journal de Banque" },
+    { id: 4, code: "OD", libelle: "Opérations Diverses" },
+  ],
+  cjnl: [
+    { id: 1, code: "ACHATS", libelle: "Journal Achats TomPro",  comptePrincipal: "601100" },
+    { id: 2, code: "VENTES", libelle: "Journal Ventes TomPro",  comptePrincipal: "701000" },
+    { id: 3, code: "BANQUE", libelle: "Journal Banque TomPro",  comptePrincipal: "512000" },
+  ],
+  cgestionn: [
+    { id: 1, code: "0001", libelle: "Direction Financière" },
+    { id: 2, code: "0002", libelle: "Direction Technique" },
+    { id: 3, code: "0010", libelle: "Direction Commerciale" },
+  ],
+  csr: [
+    { id: 1, code: "KA0123", libelle: "Kinshasa — Zone A",     cfiliere: "K", cregion: "A", cemet: "0123" },
+    { id: 2, code: "GM0789", libelle: "Goma — Masisi",          cfiliere: "G", cregion: "M", cemet: "0789" },
+    { id: 3, code: "LB1011", libelle: "Lubumbashi — Centre",    cfiliere: "L", cregion: "B", cemet: "1011" },
+  ],
+};
+
+/* Données TomPro simulées */
+const TOMPRO_RAW = [
+  { numPiece: "042", libelle: "Achat matériels réseau",        compteDebT: "601100", compteCrT: "401000", montantDev: 100,  date: "15/03/2025", journal: "ACHATS" },
+  { numPiece: "043", libelle: "Fournitures bureau",             compteDebT: "601100", compteCrT: "401000", montantDev: 20,   date: "18/03/2025", journal: "ACHATS" },
+  { numPiece: "044", libelle: "Vente électricité mars",         compteDebT: "512000", compteCrT: "701000", montantDev: 350,  date: "20/03/2025", journal: "VENTES" },
+  { numPiece: "045", libelle: "Paiement fournisseur local",     compteDebT: "401000", compteCrT: "512000", montantDev: 80,   date: "22/03/2025", journal: "BANQUE" },
+  { numPiece: "046", libelle: "Achat câbles électriques",       compteDebT: "601100", compteCrT: "401000", montantDev: 450,  date: "25/03/2025", journal: "ACHATS" },
+  { numPiece: "047", libelle: "Vente prestation technique",     compteDebT: "512000", compteCrT: "701000", montantDev: 200,  date: "26/03/2025", journal: "VENTES" },
+];
+
+/* ══════════════════════════════════════════════
+   HELPERS
+══════════════════════════════════════════════ */
+const extractCSR = (code) => {
+  if (!code || code.length < 6) return { cfiliere: "", cregion: "", cemet: "" };
+  return { cfiliere: code[0], cregion: code[1], cemet: code.slice(2) };
+};
+const buildAFOLI = (jnl, annee, mois, seq) =>
+  `${(jnl || "  ").substring(0, 2).toUpperCase()}${String(annee).slice(-2)}${String(mois).padStart(2, "0")}${String(seq).padStart(3, "0")}`;
+const genFileName = (annee, moisNum) =>
+  `CDP${String(annee).slice(-3)}${String(moisNum).padStart(2, "0")}`;
+
+/* ══════════════════════════════════════════════
+   DRAG HOOK
+══════════════════════════════════════════════ */
+function useDrag(handleRef, winRef) {
+  const drag = useRef(null);
+  useEffect(() => {
+    const handle = handleRef.current;
+    if (!handle) return;
+    const onDown = (e) => {
+      if (e.target.closest(".chrome-btns,.toolbar,.content,.statusbar,.dropdown")) return;
+      const r = winRef.current.getBoundingClientRect();
+      drag.current = { ox: e.clientX - r.left, oy: e.clientY - r.top };
+      e.preventDefault();
+    };
+    const onMove = (e) => {
+      if (!drag.current) return;
+      const p = winRef.current.parentElement.getBoundingClientRect();
+      let x = Math.max(0, Math.min(e.clientX - drag.current.ox - p.left, p.width - 60));
+      let y = Math.max(0, Math.min(e.clientY - drag.current.oy - p.top, p.height - 40));
+      winRef.current.style.left = x + "px";
+      winRef.current.style.top  = y + "px";
+    };
+    const onUp = () => { drag.current = null; };
+    handle.addEventListener("mousedown", onDown);
+    window.addEventListener("mousemove", onMove);
+    window.addEventListener("mouseup", onUp);
+    return () => {
+      handle.removeEventListener("mousedown", onDown);
+      window.removeEventListener("mousemove", onMove);
+      window.removeEventListener("mouseup", onUp);
+    };
+  }, []);
+}
+
+/* ══════════════════════════════════════════════
+   MDI WINDOW
+══════════════════════════════════════════════ */
+function MdiWindow({ id, title, icon, width, height, posX, posY, focused, onFocus, onClose, children }) {
+  const winRef = useRef(null);
+  const tbRef  = useRef(null);
+  useDrag(tbRef, winRef);
+  return (
+    <div ref={winRef} className={`mdi-win${focused ? " focused" : ""}`}
+      style={{ width, height, left: posX, top: posY, zIndex: focused ? 10 : 5 }}
+      onMouseDown={onFocus}>
+      <div ref={tbRef} className="titlebar">
+        <span className="titlebar-icon">{icon}</span>
+        <span className="titlebar-text">{title}</span>
+        <div className="chrome-btns">
+          <button className="chrome-btn">&#x2014;</button>
+          <button className="chrome-btn">&#x25A1;</button>
+          <button className="chrome-btn close" onClick={onClose}>&#x2715;</button>
+        </div>
+      </div>
+      {children}
+    </div>
+  );
+}
+
+/* ══════════════════════════════════════════════
+   COMPOSANTS PARTAGÉS
+══════════════════════════════════════════════ */
+const Alert = ({ type, icon, children }) => (
+  <div className={`alert ${type}`}><span style={{ flexShrink: 0 }}>{icon}</span><span>{children}</span></div>
+);
+
+const Badge = ({ label, bg, color }) => (
+  <span className="badge" style={{ background: bg, color }}>{label}</span>
+);
+
+function DataGrid({ cols, rows, selId, onSel }) {
+  return (
+    <div className="grid-wrap">
+      <table className="w11-grid">
+        <thead>
+          <tr>{cols.map(c => <th key={c.k}>{c.l}</th>)}</tr>
+        </thead>
+        <tbody>
+          {rows.map((r, i) => (
+            <tr key={r.id ?? i} className={r.id === selId ? "sel" : ""} onClick={() => onSel && onSel(r)}>
+              {cols.map(c => (
+                <td key={c.k}>{c.render ? c.render(r) : r[c.k]}</td>
+              ))}
+            </tr>
+          ))}
+          {!rows.length && (
+            <tr><td colSpan={cols.length} style={{ textAlign: "center", color: "#999", fontStyle: "italic", padding: 14 }}>
+              Aucun enregistrement
+            </td></tr>
+          )}
+        </tbody>
+      </table>
+    </div>
+  );
+}
+
+function FormRow({ label, lw = 150, children }) {
+  return (
+    <div className="form-row">
+      <label style={{ minWidth: lw, textAlign: "right" }}>{label}</label>
+      {children}
+    </div>
+  );
+}
+
+const W11Input = ({ value, onChange, maxLen, style, readOnly, placeholder, type = "text" }) => (
+  <input type={type} className="w11-input" value={value}
+    onChange={e => onChange && onChange(e.target.value)}
+    maxLength={maxLen} readOnly={readOnly} placeholder={placeholder}
+    style={{ minWidth: 160, ...style }} />
+);
+
+const W11Select = ({ value, onChange, opts, style }) => (
+  <select className="w11-select" value={value} onChange={e => onChange(e.target.value)} style={{ minWidth: 160, ...style }}>
+    <option value="">— Sélectionner —</option>
+    {opts.map(o => <option key={o.v} value={o.v}>{o.l}</option>)}
+  </select>
+);
+
+function Toolbar({ btns }) {
+  return (
+    <div className="toolbar">
+      {btns.map((b, i) =>
+        b === "|" ? <div key={i} className="tb-sep" /> :
+          <button key={i} className="tb-btn" onClick={b.onClick} disabled={!!b.disabled}>
+            {b.icon} {b.label}
+          </button>
+      )}
+    </div>
+  );
+}
+
+function StatusBar({ items }) {
+  return (
+    <div className="statusbar">
+      {items.filter(Boolean).map((it, i) => <span key={i} className="sb-item">{it}</span>)}
+    </div>
+  );
+}
+
+/* ══════════════════════════════════════════════
+   CRUD SCREEN GÉNÉRIQUE
+══════════════════════════════════════════════ */
+function CrudScreen({ title, icon, cols, rows, setRows, fields, empty, validate, extra = "" }) {
+  const [sel, setSel]     = useState(null);
+  const [form, setForm]   = useState(empty);
+  const [mode, setMode]   = useState("view");
+  const [msg, setMsg]     = useState(null);
+  const [del, setDel]     = useState(false);
+
+  const upd = (k, v) => setForm(f => ({ ...f, [k]: v }));
+
+  const startNew  = () => { setForm({ ...empty }); setSel(null); setMode("new");  setMsg(null); };
+  const startEdit = () => { if (!sel) return; setForm({ ...sel }); setMode("edit"); setMsg(null); };
+  const cancel    = () => { setMode("view"); setMsg(null); setSel(null); setForm(empty); };
+
+  const save = () => {
+    const err = validate(form, rows, mode === "edit" ? sel?.id : null);
+    if (err) { setMsg({ t: "err", m: err }); return; }
+    if (mode === "new") {
+      const nr = { ...form, id: Date.now() };
+      setRows(p => [...p, nr]); setSel(nr);
+    } else {
+      setRows(p => p.map(r => r.id === sel.id ? { ...form, id: r.id } : r));
+      setSel({ ...form, id: sel.id });
+    }
+    setMode("view"); setMsg({ t: "ok", m: "Enregistrement sauvegardé." });
+  };
+
+  const doDelete = () => {
+    setRows(p => p.filter(r => r.id !== sel.id));
+    setSel(null); setMode("view"); setDel(false);
+    setMsg({ t: "ok", m: "Enregistrement supprimé." });
+  };
+
+  return (
+    <div style={{ display: "flex", flexDirection: "column", height: "100%" }}>
+      <Toolbar btns={[
+        { icon: "➕", label: "Nouveau",    onClick: startNew },
+        { icon: "✏️", label: "Modifier",   onClick: startEdit,  disabled: !sel },
+        { icon: "🗑️", label: "Supprimer",  onClick: () => sel && setDel(true), disabled: !sel },
+        "|",
+        { icon: "↩️", label: "Annuler",    onClick: cancel,     disabled: mode === "view" },
+        { icon: "💾", label: "Enregistrer",onClick: save,       disabled: mode === "view" },
+      ]} />
+      <div className="content">
+        <div className="section-bar">{icon} {title}</div>
+        {msg && <Alert type={msg.t === "err" ? "err" : "ok"} icon={msg.t === "err" ? "✕" : "✓"}>{msg.m}</Alert>}
+        <DataGrid cols={cols} rows={rows} selId={sel?.id}
+          onSel={r => { if (mode === "view") { setSel(r); setForm({ ...r }); } }} />
+        {mode !== "view" && (
+          <div className="group" style={{ marginTop: 10 }}>
+            <span className="group-title">{mode === "new" ? "➕ Nouvel enregistrement" : "✏️ Modification"}</span>
+            {fields(form, upd)}
+          </div>
+        )}
+      </div>
+      <StatusBar items={[`${rows.length} enreg.`, sel ? `Sél. : ${sel[cols[0].k]}` : "", extra]} />
+
+      {del && (
+        <div className="modal-bg">
+          <div className="modal-box">
+            <div className="modal-title">🗑️ Confirmer la suppression</div>
+            <div className="modal-body">
+              <Alert type="warn" icon="⚠">Voulez-vous supprimer cet enregistrement ? Action irréversible.</Alert>
+            </div>
+            <div className="modal-footer">
+              <button className="w11-btn" onClick={() => setDel(false)}>Annuler</button>
+              <button className="w11-btn danger" onClick={doDelete}>🗑️ Supprimer</button>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+/* ══════════════════════════════════════════════
+   ÉCRANS STRUCTURE
+══════════════════════════════════════════════ */
+function ProjetsScreen({ data, setData }) {
+  return (
+    <CrudScreen title="Liste des Projets (PROJET)" icon="📁"
+      cols={[{ k: "code", l: "Code Projet" }, { k: "libelle", l: "Libellé" }]}
+      rows={data} setRows={setData} empty={{ code: "", libelle: "" }}
+      validate={(f, rows, eid) => {
+        if (!f.code.trim()) return "Code projet obligatoire.";
+        if (rows.some(r => r.code === f.code && r.id !== eid)) return "Ce code existe déjà.";
+      }}
+      fields={(f, set) => <>
+        <FormRow label="Code Projet :" lw={130}>
+          <W11Input value={f.code} onChange={v => set("code", v.toUpperCase())} style={{ width: 140 }} />
+        </FormRow>
+        <FormRow label="Libellé :" lw={130}>
+          <W11Input value={f.libelle} onChange={v => set("libelle", v)} style={{ width: 320 }} />
+        </FormRow>
+      </>}
+    />
+  );
+}
+
+function ExerciceScreen({ data, setData }) {
+  const statusStyle = { "En cours": ["#EAF3DE", "#3B6D11"], "Clôturé": ["#F0F0F0", "#5F5E5A"], "Futur": ["#E6F1FB", "#0C447C"] };
+  return (
+    <CrudScreen title="Exercice Comptable" icon="📅"
+      cols={[
+        { k: "code",     l: "Code" },
+        { k: "libelle",  l: "Libellé" },
+        { k: "dateDebut",l: "Date Début" },
+        { k: "dateFin",  l: "Date Fin" },
+        { k: "statut",   l: "Statut", render: r => {
+          const [bg, color] = statusStyle[r.statut] || ["#eee", "#333"];
+          return <Badge label={r.statut} bg={bg} color={color} />;
+        }},
+      ]}
+      rows={data} setRows={setData}
+      empty={{ code: "", libelle: "", dateDebut: "", dateFin: "", statut: "En cours" }}
+      validate={(f, rows, eid) => {
+        if (!f.code.trim() || !f.dateDebut || !f.dateFin) return "Tous les champs sont obligatoires.";
+        if (rows.some(r => r.code === f.code && r.id !== eid)) return "Code exercice déjà existant.";
+      }}
+      fields={(f, set) => (
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "4px 20px" }}>
+          <FormRow label="Code :" lw={100}><W11Input value={f.code} onChange={v => set("code", v)} style={{ width: 100 }} /></FormRow>
+          <FormRow label="Libellé :" lw={80}><W11Input value={f.libelle} onChange={v => set("libelle", v)} style={{ width: 200 }} /></FormRow>
+          <FormRow label="Date début :" lw={100}><W11Input type="date" value={f.dateDebut} onChange={v => set("dateDebut", v)} style={{ width: 145 }} /></FormRow>
+          <FormRow label="Date fin :" lw={80}><W11Input type="date" value={f.dateFin} onChange={v => set("dateFin", v)} style={{ width: 145 }} /></FormRow>
+          <FormRow label="Statut :" lw={100}>
+            <select className="w11-select" value={f.statut} onChange={e => set("statut", e.target.value)} style={{ width: 140 }}>
+              {["En cours", "Clôturé", "Futur"].map(s => <option key={s}>{s}</option>)}
+            </select>
+          </FormRow>
+        </div>
+      )}
+    />
+  );
+}
+
+function CComptegScreen({ data, setData }) {
+  const [search, setSearch] = useState("");
+  const [sel,    setSel]    = useState(null);
+  const [form,   setForm]   = useState({ compteTompro: "", libelleTompro: "", compteSnell: "", libelleSnell: "" });
+  const [mode,   setMode]   = useState("view");
+  const [msg,    setMsg]    = useState(null);
+  const upd = (k, v) => setForm(f => ({ ...f, [k]: v }));
+
+  const filtered = data.filter(r =>
+    r.compteTompro.includes(search) ||
+    r.libelleTompro.toLowerCase().includes(search.toLowerCase()) ||
+    r.compteSnell.includes(search)
+  );
+
+  const save = () => {
+    if (!form.compteTompro.trim() || !form.compteSnell.trim()) { setMsg({ t: "err", m: "Comptes obligatoires." }); return; }
+    if (form.compteSnell.length > 11) { setMsg({ t: "err", m: "Compte SNEL : max 11 car." }); return; }
+    if (mode === "new" && data.some(r => r.compteTompro === form.compteTompro)) { setMsg({ t: "err", m: "Compte TomPro déjà enregistré." }); return; }
+    if (mode === "new") setData(p => [...p, { ...form, id: Date.now() }]);
+    else setData(p => p.map(r => r.id === sel.id ? { ...form, id: r.id } : r));
+    setMode("view"); setMsg({ t: "ok", m: "Correspondance enregistrée." });
+  };
+
+  return (
+    <div style={{ display: "flex", flexDirection: "column", height: "100%" }}>
+      <Toolbar btns={[
+        { icon: "➕", label: "Nouveau",    onClick: () => { setForm({ compteTompro: "", libelleTompro: "", compteSnell: "", libelleSnell: "" }); setSel(null); setMode("new"); setMsg(null); } },
+        { icon: "✏️", label: "Modifier",   onClick: () => { if (!sel) return; setForm({ ...sel }); setMode("edit"); setMsg(null); }, disabled: !sel },
+        { icon: "🗑️", label: "Supprimer",  onClick: () => { if (sel) { setData(p => p.filter(r => r.id !== sel.id)); setSel(null); } }, disabled: !sel },
+        "|",
+        { icon: "↩️", label: "Annuler",    onClick: () => { setMode("view"); setMsg(null); }, disabled: mode === "view" },
+        { icon: "💾", label: "Enregistrer",onClick: save, disabled: mode === "view" },
+      ]} />
+      <div className="content">
+        <div className="section-bar">🔗 Correspondances TomPro ↔ SNEL (CCOMPTEG)</div>
+        <Alert type="info" icon="💡">Si une correspondance est absente lors du traitement, une fenêtre de création s'affiche automatiquement.</Alert>
+        {msg && <Alert type={msg.t === "err" ? "err" : "ok"} icon={msg.t === "err" ? "✕" : "✓"}>{msg.m}</Alert>}
+        <div style={{ display: "flex", gap: 6, marginBottom: 8 }}>
+          <W11Input value={search} onChange={setSearch} placeholder="🔍  Rechercher..." style={{ width: 280 }} />
+          <button className="w11-btn" onClick={() => setSearch("")}>✕</button>
+        </div>
+        <DataGrid
+          cols={[
+            { k: "compteTompro",  l: "Compte TomPro" },
+            { k: "libelleTompro", l: "Libellé TomPro" },
+            { k: "compteSnell",   l: "Compte SNEL (11 car.)" },
+            { k: "libelleSnell",  l: "Libellé SNEL" },
+          ]}
+          rows={filtered} selId={sel?.id}
+          onSel={r => { if (mode === "view") { setSel(r); setForm({ ...r }); } }}
+        />
+        {mode !== "view" && (
+          <div className="group" style={{ marginTop: 10 }}>
+            <span className="group-title">{mode === "new" ? "➕ Nouvelle correspondance" : "✏️ Modification"}</span>
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "4px 20px" }}>
+              <FormRow label="Compte TomPro :"   lw={150}><W11Input value={form.compteTompro}  onChange={v => upd("compteTompro", v)}  style={{ width: 150 }} /></FormRow>
+              <FormRow label="Compte SNEL (11) :" lw={150}><W11Input value={form.compteSnell}   onChange={v => upd("compteSnell", v)}   maxLen={11} style={{ width: 150 }} /></FormRow>
+              <FormRow label="Libellé TomPro :"  lw={150}><W11Input value={form.libelleTompro} onChange={v => upd("libelleTompro", v)} style={{ width: 230 }} /></FormRow>
+              <FormRow label="Libellé SNEL :"    lw={150}><W11Input value={form.libelleSnell}  onChange={v => upd("libelleSnell", v)}  style={{ width: 230 }} /></FormRow>
+            </div>
+          </div>
+        )}
+      </div>
+      <StatusBar items={[`${data.length} corr.`, filtered.length !== data.length ? `${filtered.length} filtrées` : "", sel ? `Sél. : ${sel.compteTompro}` : ""]} />
+    </div>
+  );
+}
+
+function CJournalScreen({ data, setData }) {
+  return (
+    <CrudScreen title="Journaux SNEL (CJOURNAL)" icon="📓" extra="2 car. max"
+      cols={[{ k: "code", l: "Code (2 car.)" }, { k: "libelle", l: "Libellé" }]}
+      rows={data} setRows={setData} empty={{ code: "", libelle: "" }}
+      validate={(f, rows, eid) => {
+        if (!f.code.trim() || f.code.length > 2) return "Code : max 2 car. alphanumériques.";
+        if (rows.some(r => r.code === f.code && r.id !== eid)) return "Ce code existe déjà.";
+      }}
+      fields={(f, set) => <>
+        <FormRow label="Code Journal (max 2) :" lw={170}>
+          <W11Input value={f.code} onChange={v => set("code", v.toUpperCase().slice(0, 2))} maxLen={2} style={{ width: 60 }} />
+          <span style={{ fontSize: 10, color: "#888" }}>2 car. alphanumériques</span>
+        </FormRow>
+        <FormRow label="Libellé :" lw={170}>
+          <W11Input value={f.libelle} onChange={v => set("libelle", v)} style={{ width: 280 }} />
+        </FormRow>
+      </>}
+    />
+  );
+}
+
+function CJNLScreen({ data, setData }) {
+  return (
+    <CrudScreen title="Journaux TomPro (CJNL)" icon="📔" extra="10 car. max"
+      cols={[
+        { k: "code",            l: "Code (10 car.)" },
+        { k: "libelle",         l: "Libellé" },
+        { k: "comptePrincipal", l: "Compte Principal" },
+      ]}
+      rows={data} setRows={setData} empty={{ code: "", libelle: "", comptePrincipal: "" }}
+      validate={(f, rows, eid) => {
+        if (!f.code.trim() || f.code.length > 10) return "Code : max 10 car.";
+        if (rows.some(r => r.code === f.code && r.id !== eid)) return "Ce code existe déjà.";
+      }}
+      fields={(f, set) => <>
+        <FormRow label="Code Journal TomPro :" lw={170}>
+          <W11Input value={f.code} onChange={v => set("code", v.toUpperCase().slice(0, 10))} maxLen={10} style={{ width: 150 }} />
+          <span style={{ fontSize: 10, color: "#888" }}>10 car. max</span>
+        </FormRow>
+        <FormRow label="Libellé :" lw={170}>
+          <W11Input value={f.libelle} onChange={v => set("libelle", v)} style={{ width: 280 }} />
+        </FormRow>
+        <FormRow label="Compte Principal :" lw={170}>
+          <W11Input value={f.comptePrincipal} onChange={v => set("comptePrincipal", v)} style={{ width: 150 }} />
+        </FormRow>
+      </>}
+    />
+  );
+}
+
+function CGestionnScreen({ data, setData }) {
+  return (
+    <CrudScreen title="Code Gestionnaire (CGESTIONN)" icon="🏷️" extra="4 chiffres"
+      cols={[{ k: "code", l: "Code (4 chiff.)" }, { k: "libelle", l: "Libellé" }]}
+      rows={data} setRows={setData} empty={{ code: "", libelle: "" }}
+      validate={(f, rows, eid) => {
+        if (!/^\d{4}$/.test(f.code)) return "Exactement 4 chiffres numériques.";
+        if (rows.some(r => r.code === f.code && r.id !== eid)) return "Ce code existe déjà.";
+      }}
+      fields={(f, set) => <>
+        <FormRow label="Code Gestionnaire :" lw={160}>
+          <W11Input value={f.code} onChange={v => set("code", v.replace(/\D/g, "").slice(0, 4))} maxLen={4} style={{ width: 80 }} />
+          <span style={{ fontSize: 10, color: "#888" }}>4 chiffres</span>
+        </FormRow>
+        <FormRow label="Libellé :" lw={160}>
+          <W11Input value={f.libelle} onChange={v => set("libelle", v)} style={{ width: 280 }} />
+        </FormRow>
+      </>}
+    />
+  );
+}
+
+function CSRScreen({ data, setData }) {
+  const [sel,  setSel]  = useState(null);
+  const [form, setForm] = useState({ code: "", libelle: "" });
+  const [mode, setMode] = useState("view");
+  const [msg,  setMsg]  = useState(null);
+  const ext = extractCSR(form.code);
+
+  const save = () => {
+    if (form.code.length !== 6) { setMsg({ t: "err", m: "Code UB : exactement 6 car." }); return; }
+    if (mode === "new" && data.some(r => r.code === form.code)) { setMsg({ t: "err", m: "Code existant." }); return; }
+    const row = { code: form.code, libelle: form.libelle, ...extractCSR(form.code) };
+    if (mode === "new") setData(p => [...p, { ...row, id: Date.now() }]);
+    else setData(p => p.map(r => r.id === sel.id ? { ...row, id: r.id } : r));
+    setMode("view"); setMsg({ t: "ok", m: "Unité budgétaire enregistrée." });
+  };
+
+  return (
+    <div style={{ display: "flex", flexDirection: "column", height: "100%" }}>
+      <Toolbar btns={[
+        { icon: "➕", label: "Nouveau",    onClick: () => { setForm({ code: "", libelle: "" }); setSel(null); setMode("new"); setMsg(null); } },
+        { icon: "✏️", label: "Modifier",   onClick: () => { if (!sel) return; setForm({ code: sel.code, libelle: sel.libelle }); setMode("edit"); setMsg(null); }, disabled: !sel },
+        { icon: "🗑️", label: "Supprimer",  onClick: () => { if (sel) { setData(p => p.filter(r => r.id !== sel.id)); setSel(null); } }, disabled: !sel },
+        "|",
+        { icon: "↩️", label: "Annuler",    onClick: () => { setMode("view"); setMsg(null); }, disabled: mode === "view" },
+        { icon: "💾", label: "Enregistrer",onClick: save, disabled: mode === "view" },
+      ]} />
+      <div className="content">
+        <div className="section-bar">🏢 Code Unité Budgétaire (CSR) — 6 car. alphanumériques</div>
+        <Alert type="info" icon="ℹ">CFILIERE = 1er car. | CREGION = 2e car. | CEMET = 4 derniers car.</Alert>
+        {msg && <Alert type={msg.t === "err" ? "err" : "ok"} icon={msg.t === "err" ? "✕" : "✓"}>{msg.m}</Alert>}
+        <DataGrid
+          cols={[
+            { k: "code",     l: "Code UB (6 car.)" },
+            { k: "cfiliere", l: "CFILIERE" },
+            { k: "cregion",  l: "CREGION" },
+            { k: "cemet",    l: "CEMET (4 car.)" },
+            { k: "libelle",  l: "Libellé" },
+          ]}
+          rows={data} selId={sel?.id}
+          onSel={r => { if (mode === "view") { setSel(r); setForm({ code: r.code, libelle: r.libelle }); } }}
+        />
+        {mode !== "view" && (
+          <div className="group" style={{ marginTop: 10 }}>
+            <span className="group-title">{mode === "new" ? "➕ Nouveau" : "✏️ Modification"}</span>
+            <div style={{ display: "flex", gap: 20, flexWrap: "wrap" }}>
+              <div>
+                <FormRow label="Code UB (6 car.) :" lw={150}>
+                  <W11Input value={form.code} onChange={v => setForm(f => ({ ...f, code: v.toUpperCase().slice(0, 6) }))} maxLen={6} style={{ width: 100 }} />
+                </FormRow>
+                <FormRow label="Libellé :" lw={150}>
+                  <W11Input value={form.libelle} onChange={v => setForm(f => ({ ...f, libelle: v }))} style={{ width: 260 }} />
+                </FormRow>
+              </div>
+              <div className="extraction-box">
+                <p style={{ fontSize: 11, fontWeight: 600, color: "#005FB8", marginBottom: 8 }}>⚡ Extraction automatique</p>
+                {[["CFILIERE", ext.cfiliere, "1er car."], ["CREGION", ext.cregion, "2e car."], ["CEMET", ext.cemet, "4 derniers"]].map(([k, v, h]) => (
+                  <div key={k} style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 5 }}>
+                    <span style={{ fontSize: 11, fontWeight: 600, width: 64 }}>{k}</span>
+                    <input readOnly value={v} className="w11-input" style={{ width: 74 }} />
+                    <span style={{ fontSize: 10, color: "#888" }}>{h}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
+      <StatusBar items={[`${data.length} unités`, sel ? `Sél. : ${sel.code}` : "", "6 car."]} />
+    </div>
+  );
+}
+
+function UsersScreen({ data, setData }) {
+  return (
+    <CrudScreen title="Gestion des Utilisateurs" icon="👤"
+      cols={[
+        { k: "login", l: "Login" },
+        { k: "nom",   l: "Nom complet" },
+        { k: "role",  l: "Rôle", render: r => <Badge label={r.role} bg={r.role === "ADMIN" ? "#FBEBE9" : "#E6F1FB"} color={r.role === "ADMIN" ? "#710F0F" : "#003E7E"} /> },
+        { k: "actif", l: "Actif", render: r => r.actif ? "✓ Oui" : "✕ Non" },
+      ]}
+      rows={data} setRows={setData}
+      empty={{ login: "", nom: "", role: "OPERATEUR", actif: true, mdp: "", mdpConfirm: "" }}
+      validate={(f, rows, eid) => {
+        if (!f.login.trim()) return "Login obligatoire.";
+        if (!f.nom.trim())   return "Nom complet obligatoire.";
+        if (f.mdp && f.mdp !== f.mdpConfirm) return "Mots de passe différents.";
+        if (rows.some(r => r.login === f.login && r.id !== eid)) return "Login déjà utilisé.";
+      }}
+      fields={(f, set) => (
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "4px 24px" }}>
+          <FormRow label="Login :" lw={120}><W11Input value={f.login} onChange={v => set("login", v)} style={{ width: 180 }} /></FormRow>
+          <FormRow label="Rôle :" lw={80}>
+            <select className="w11-select" value={f.role} onChange={e => set("role", e.target.value)} style={{ width: 160 }}>
+              <option value="ADMIN">Administrateur</option>
+              <option value="OPERATEUR">Opérateur</option>
+            </select>
+          </FormRow>
+          <FormRow label="Nom complet :" lw={120}><W11Input value={f.nom} onChange={v => set("nom", v)} style={{ width: 220 }} /></FormRow>
+          <FormRow label="Actif :" lw={80}>
+            <input type="checkbox" checked={f.actif} onChange={e => set("actif", e.target.checked)} style={{ width: 14, height: 14 }} />
+            <span style={{ fontSize: 12 }}>Compte actif</span>
+          </FormRow>
+          <FormRow label="Mot de passe :" lw={120}><W11Input type="password" value={f.mdp || ""} onChange={v => set("mdp", v)} style={{ width: 180 }} /></FormRow>
+          <FormRow label="Confirmation :" lw={80}><W11Input type="password" value={f.mdpConfirm || ""} onChange={v => set("mdpConfirm", v)} style={{ width: 180 }} /></FormRow>
+        </div>
+      )}
+    />
+  );
+}
+
+/* ══════════════════════════════════════════════
+   CONFIGURATION BDD
+══════════════════════════════════════════════ */
+function DBConfigScreen({ onSave }) {
+  const [form, setForm] = useState({ serveur: "SNEL-SRV\\SQLEXPRESS", auth: "SQL", user: "sa", password: "", dbName: "MoulinetteSNEL" });
+  const [tested, setTested] = useState(null);
+  const [testing, setTesting] = useState(false);
+  const upd = (k, v) => setForm(f => ({ ...f, [k]: v }));
+
+  const test = () => {
+    setTesting(true); setTested(null);
+    setTimeout(() => { setTesting(false); setTested(form.serveur && form.dbName ? "ok" : "err"); }, 1200);
+  };
+
+  return (
+    <div style={{ display: "flex", flexDirection: "column", height: "100%" }}>
+      <div className="content">
+        <div className="section-bar">⚙️ Paramétrage — Connexion SQL Server</div>
+        <Alert type="warn" icon="⚠">Configurez la connexion SQL Server avant la première utilisation de l'application.</Alert>
+        <div className="group">
+          <span className="group-title">Connexion SQL Server</span>
+          <FormRow label="Nom du serveur :"    lw={170}><W11Input value={form.serveur} onChange={v => upd("serveur", v)} style={{ width: 260 }} /></FormRow>
+          <FormRow label="Authentification :"  lw={170}>
+            <select className="w11-select" value={form.auth} onChange={e => upd("auth", e.target.value)} style={{ width: 240 }}>
+              <option value="SQL">Authentification SQL Server</option>
+              <option value="WIN">Authentification Windows</option>
+            </select>
+          </FormRow>
+          {form.auth === "SQL" && <>
+            <FormRow label="Nom d'utilisateur :" lw={170}><W11Input value={form.user} onChange={v => upd("user", v)} style={{ width: 180 }} /></FormRow>
+            <FormRow label="Mot de passe :"      lw={170}><W11Input type="password" value={form.password} onChange={v => upd("password", v)} style={{ width: 180 }} /></FormRow>
+          </>}
+          <FormRow label="Base de données :" lw={170}><W11Input value={form.dbName} onChange={v => upd("dbName", v)} style={{ width: 220 }} /></FormRow>
+          <div style={{ display: "flex", alignItems: "center", gap: 10, marginTop: 8 }}>
+            <button className="w11-btn" onClick={test} disabled={testing}>{testing ? "⏳ Test..." : "🔄 Tester la connexion"}</button>
+            {tested === "ok"  && <span style={{ fontSize: 12, color: "#107C10" }}>✓ Connexion réussie</span>}
+            {tested === "err" && <span style={{ fontSize: 12, color: "#C42B1C" }}>✕ Échec — vérifiez les paramètres</span>}
+          </div>
+        </div>
+        <div style={{ display: "flex", justifyContent: "flex-end", gap: 8, marginTop: 4 }}>
+          <button className="w11-btn primary" onClick={() => { if (tested === "ok") onSave(); else setTested("err"); }}>💾 Enregistrer</button>
+        </div>
+      </div>
+      <StatusBar items={["Configuration BDD", tested === "ok" ? "✓ Connexion OK" : "En attente de test"]} />
+    </div>
+  );
+}
+
+/* ══════════════════════════════════════════════
+   ÉCRAN TRAITEMENT
+══════════════════════════════════════════════ */
+function TraitementScreen({ data }) {
+  const { projets, exercices, ccompteg, setCcompteg, cjournal, cjnl, cgestionn, csr } = data;
+
+  const [form,       setForm]       = useState({ projet: "", journal: "", exercice: "", gestionnaire: "", ub: "", taux: "2850" });
+  const [fileName,   setFileName]   = useState("Export_Mars2026.csv");
+  const [progress,   setProgress]   = useState(0);
+  const [processing, setProcessing] = useState(false);
+  const [results,    setResults]    = useState([]);
+  const [logs,       setLogs]       = useState([]);
+  const [done,       setDone]       = useState(false);
+  const [missing,    setMissing]    = useState(null);
+  const [newCorr,    setNewCorr]    = useState({ compteTompro: "", libelleTompro: "", compteSnell: "", libelleSnell: "" });
+
+  const timerRef = useRef(null);
+  const pendRef  = useRef([]);
+  const corrRef  = useRef(ccompteg);
+  useEffect(() => { corrRef.current = ccompteg; }, [ccompteg]);
+
+  const set  = (k, v) => setForm(f => ({ ...f, [k]: v }));
+  const addLog = (m, t = "info") => setLogs(p => [...p, { m, t, ts: new Date().toLocaleTimeString() }]);
+
+  const ubInfo   = csr.find(r => r.code === form.ub);
+  const jnlInfo  = cjournal.find(r => r.code === form.journal);
+  const projInfo = projets.find(r => r.code === form.projet);
+  const exInfo   = exercices.find(r => r.code === form.exercice);
+  const formOK   = form.projet && form.journal && form.exercice && form.gestionnaire && form.ub && form.taux && fileName;
+
+  const buildLines = useCallback((rows, corr) => {
+    const res = []; let op = 0; const fm = {};
+    rows.forEach(row => {
+      op++;
+      const cD = corr.find(c => c.compteTompro === row.compteDebT)?.compteSnell || "???";
+      const cC = corr.find(c => c.compteTompro === row.compteCrT)?.compteSnell  || "???";
+      const jp = (jnlInfo?.code || "AC").substring(0, 2);
+      const an = exInfo?.code || "2025"; const mo = 3;
+      const fk = jp + an + mo; fm[fk] = (fm[fk] || 0) + 1;
+      const fo = buildAFOLI(jp, an, mo, fm[fk]);
+      const jt = cjnl.find(c => c.code === row.journal);
+      const ci = (jt?.comptePrincipal || "601100").substring(0, 5) + (ubInfo?.code || "");
+      const tx = parseFloat(form.taux) || 1;
+      const base = {
+        CFILIERE: ubInfo?.cfiliere || "", CJOURNAL: jnlInfo?.code || "",
+        CBORDREAU: `CDP_${projInfo?.code || ""}`, COPERATION: String(op).padStart(2, "0"),
+        CGESTIONN: form.gestionnaire, CREGION: ubInfo?.cregion || "",
+        CUNITE: "", CBANQUE: "", CECHEANCE: "", CMVT: "", CCOMPTEI: "",
+        CSR: ubInfo?.code || "", CPIECE: "0" + row.numPiece, CAPPARI: "",
+        CLIBMVT: row.libelle.substring(0, 40), CINDICL: "", CXCOMPT: "", CDEVISE: "",
+        CINDICEPCH: "", CDPCH: "", CINDICECRS: "", CTRESORERI: "",
+        CEMET: ubInfo?.cemet || "", AFOLI: fo, CIMPUT: ci,
+        DPERIODE: `${an}0${mo}`, DINSCRIPT: row.date,
+        ENT_FIN: ubInfo?.code || "", NUMCHEQ: "", NPERIODE: "", CPTEARECL: "", CPTEAREFL: "",
+      };
+      res.push({ ...base, CLIGNE: "01", XLIGNE: "0", CCOMPTEG: cD, ADEBMVTZ: (row.montantDev * tx).toFixed(2), ACREMVTZ: "0.00", ADEBMVT: row.montantDev.toFixed(2), ACREMVT: "0.00" });
+      res.push({ ...base, CLIGNE: "02", XLIGNE: "0", CCOMPTEG: cC, ADEBMVTZ: "0.00", ACREMVTZ: (row.montantDev * tx).toFixed(2), ADEBMVT: "0.00", ACREMVT: row.montantDev.toFixed(2) });
+    });
+    return res;
+  }, [form, ubInfo, jnlInfo, projInfo, exInfo, cjnl]);
+
+  const runNext = useCallback(() => {
+    if (pendRef.current.length === 0) {
+      const res = buildLines(TOMPRO_RAW, corrRef.current);
+      setResults(res); setProgress(100); setProcessing(false); setDone(true);
+      addLog(`Traitement terminé : ${res.length} lignes générées.`, "ok"); return;
+    }
+    const row  = pendRef.current[0];
+    const step = TOMPRO_RAW.length - pendRef.current.length + 1;
+    const miss = [row.compteDebT, row.compteCrT].find(c => !corrRef.current.find(x => x.compteTompro === c));
+    if (miss) {
+      setProgress(Math.round((step / TOMPRO_RAW.length) * 100));
+      addLog(`Compte ${miss} absent de CCOMPTEG — saisie requise`, "warn");
+      setProcessing(false); setMissing({ compte: miss, row });
+      setNewCorr({ compteTompro: miss, libelleTompro: "", compteSnell: "", libelleSnell: "" }); return;
+    }
+    pendRef.current.shift();
+    setProgress(Math.round((step / TOMPRO_RAW.length) * 100));
+    addLog(`Opération n°${row.numPiece} — ${row.libelle}`);
+    timerRef.current = setTimeout(runNext, 320);
+  }, [buildLines]);
+
+  const startProcessing = () => {
+    if (!formOK) return;
+    setResults([]); setLogs([]); setProgress(0); setDone(false); setProcessing(true);
+    pendRef.current = [...TOMPRO_RAW];
+    addLog("Lecture du fichier source TomPro...");
+    timerRef.current = setTimeout(runNext, 500);
+  };
+
+  const saveMissing = () => {
+    if (!newCorr.compteSnell) return;
+    const e = { ...newCorr, id: Date.now() };
+    setCcompteg(p => [...p, e]); corrRef.current = [...corrRef.current, e];
+    setMissing(null); pendRef.current.shift(); setProcessing(true);
+    addLog(`Correspondance créée : ${newCorr.compteTompro} → ${newCorr.compteSnell}. Reprise...`, "ok");
+    timerRef.current = setTimeout(runNext, 400);
+  };
+
+  const exportCSV = () => {
+    if (!results.length) return;
+    const keys = Object.keys(results[0]);
+    const csv  = [keys.join(";"), ...results.map(r => keys.map(k => r[k]).join(";"))].join("\n");
+    const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+    const url  = URL.createObjectURL(blob);
+    const a    = document.createElement("a");
+    a.href = url; a.download = genFileName(exInfo?.code || "2025", 3) + ".csv"; a.click();
+    addLog(`Export CSV : ${genFileName(exInfo?.code || "2025", 3)}.csv`, "ok");
+  };
+
+  const tDeb = results.reduce((s, r) => s + parseFloat(r.ADEBMVT || 0), 0);
+  const tCr  = results.reduce((s, r) => s + parseFloat(r.ACREMVT || 0), 0);
+  const equil = Math.abs(tDeb - tCr) < 0.01;
+  const COLS = ["CFILIERE","CJOURNAL","CBORDREAU","COPERATION","CLIGNE","CGESTIONN","CREGION","CCOMPTEG","CSR","CPIECE","CLIBMVT","ADEBMVTZ","ACREMVTZ","ADEBMVT","ACREMVT","CEMET","AFOLI","CIMPUT","DPERIODE","DINSCRIPT","ENT_FIN"];
+
+  return (
+    <div style={{ display: "flex", flexDirection: "column", height: "100%" }}>
+      <Toolbar btns={[
+        { icon: "⚡", label: "Lancer le Traitement", onClick: startProcessing, disabled: !formOK || processing },
+        "|",
+        { icon: "📄", label: "Exporter CSV", onClick: exportCSV, disabled: !done },
+        "|",
+        { icon: "🔄", label: "Réinitialiser", onClick: () => { setResults([]); setLogs([]); setProgress(0); setDone(false); clearTimeout(timerRef.current); setProcessing(false); } },
+      ]} />
+      <div className="content">
+        {/* ENTÊTE */}
+        <div className="group" style={{ marginBottom: 10 }}>
+          <span className="group-title">📋 Entête — Paramètres de Traitement</span>
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: "6px 16px", marginBottom: 8 }}>
+            <FormRow label="Projet :" lw={110}>
+              <W11Select value={form.projet} onChange={v => set("projet", v)}
+                opts={projets.map(p => ({ v: p.code, l: `${p.code} — ${p.libelle}` }))} style={{ width: 190 }} />
+            </FormRow>
+            <FormRow label="Journal SNEL :" lw={110}>
+              <W11Select value={form.journal} onChange={v => set("journal", v)}
+                opts={cjournal.map(j => ({ v: j.code, l: `${j.code} — ${j.libelle}` }))} style={{ width: 180 }} />
+            </FormRow>
+            <FormRow label="Exercice :" lw={85}>
+              <W11Select value={form.exercice} onChange={v => set("exercice", v)}
+                opts={exercices.map(e => ({ v: e.code, l: e.libelle }))} style={{ width: 155 }} />
+            </FormRow>
+            <FormRow label="Gestionnaire :" lw={110}>
+              <W11Select value={form.gestionnaire} onChange={v => set("gestionnaire", v)}
+                opts={cgestionn.map(g => ({ v: g.code, l: `${g.code} — ${g.libelle}` }))} style={{ width: 190 }} />
+            </FormRow>
+            <FormRow label="Unité Budgétaire :" lw={110}>
+              <W11Select value={form.ub} onChange={v => set("ub", v)}
+                opts={csr.map(s => ({ v: s.code, l: `${s.code} — ${s.libelle}` }))} style={{ width: 180 }} />
+            </FormRow>
+            <FormRow label="Taux CDF/USD :" lw={85}>
+              <W11Input value={form.taux} onChange={v => set("taux", v.replace(/\D/g, ""))} style={{ width: 100 }} />
+            </FormRow>
+          </div>
+          {ubInfo && (
+            <div style={{ fontSize: 11, color: "#5D5D5D", background: "rgba(0,95,184,0.05)", border: "1px solid rgba(0,95,184,0.12)", borderRadius: 4, padding: "4px 10px", marginBottom: 8 }}>
+              UB : CFILIERE=<b>{ubInfo.cfiliere}</b> | CREGION=<b>{ubInfo.cregion}</b> | CEMET=<b>{ubInfo.cemet}</b> &nbsp;|&nbsp; CBORDREAU=<b>CDP_{projInfo?.code || "?"}</b>
+            </div>
+          )}
+          <div style={{ borderTop: "1px solid rgba(0,0,0,0.07)", paddingTop: 8 }}>
+            <p style={{ fontSize: 11, fontWeight: 600, marginBottom: 5 }}>📂 Fichier source TomPro</p>
+            <div style={{ display: "flex", gap: 6, alignItems: "center", flexWrap: "wrap" }}>
+              <W11Input value={fileName} onChange={setFileName} style={{ flex: 1, minWidth: 200 }} />
+              <button className="w11-btn" onClick={() => setFileName(`Export_${projInfo?.code || "PROJ"}_${form.exercice || "2025"}.csv`)}>📂 Simuler</button>
+              <button className={`w11-btn${formOK && !processing ? " primary" : ""}`} onClick={startProcessing} disabled={!formOK || processing}>
+                {processing ? "⏳ En cours..." : "⚡ Lancer"}
+              </button>
+            </div>
+            {!formOK && <p style={{ fontSize: 10, color: "#C42B1C", marginTop: 3 }}>Tous les champs de l'entête sont obligatoires avant de lancer le traitement.</p>}
+          </div>
+        </div>
+
+        {/* BARRE DE PROGRESSION */}
+        {(processing || done || progress > 0) && (
+          <div style={{ marginBottom: 10 }}>
+            <div style={{ display: "flex", justifyContent: "space-between", fontSize: 11, marginBottom: 3 }}>
+              <span style={{ color: "#5D5D5D" }}>{processing ? "⏳ Traitement en cours..." : done ? "✓ Traitement terminé" : ""}</span>
+              <span style={{ fontWeight: 600, color: "#005FB8" }}>{progress}%</span>
+            </div>
+            <div className="progress-wrap"><div className="progress-bar" style={{ width: `${progress}%` }} /></div>
+          </div>
+        )}
+
+        {/* CONSOLE */}
+        {logs.length > 0 && (
+          <div className="log-console">
+            {logs.map((l, i) => (
+              <div key={i} className={`log-line log-${l.t}`}>
+                <span style={{ opacity: 0.5, marginRight: 8 }}>[{l.ts}]</span>{l.m}
+              </div>
+            ))}
+          </div>
+        )}
+
+        {/* RÉSULTATS */}
+        {done && results.length > 0 && (
+          <div className="group">
+            <span className="group-title">📊 Résultat — Visualisation avant Export</span>
+            <div className="stat-row">
+              {[["Lignes", results.length], ["Opérations", results.length / 2],
+                ["Débit total", `${tDeb.toLocaleString("fr-FR", { minimumFractionDigits: 2 })} USD`],
+                ["Crédit total", `${tCr.toLocaleString("fr-FR",  { minimumFractionDigits: 2 })} USD`],
+                ["Équilibre", equil ? "✓ OK" : "✕ NON"],
+                ["Fichier export", genFileName(exInfo?.code || "2025", 3)],
+              ].map(([l, v]) => (
+                <div key={l} className="stat-card">
+                  <strong>{String(v)}</strong><span>{l}</span>
+                </div>
+              ))}
+            </div>
+            <div className="grid-wrap" style={{ maxHeight: 200 }}>
+              <table className="w11-grid" style={{ fontSize: 9 }}>
+                <thead><tr>{COLS.map(c => <th key={c} style={{ fontSize: 8, padding: "3px 6px" }}>{c}</th>)}</tr></thead>
+                <tbody>
+                  {results.map((r, i) => (
+                    <tr key={i}>
+                      {COLS.map(c => <td key={c} style={{ maxWidth: 90, fontSize: 9 }}>{r[c]}</td>)}
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+            <div style={{ display: "flex", justifyContent: "flex-end", gap: 8, marginTop: 8, alignItems: "center" }}>
+              <span style={{ fontSize: 10, color: "#888" }}>Fichier : <b>{genFileName(exInfo?.code || "2025", 3)}</b> (CDP + AAA + MM)</span>
+              <button className="w11-btn success" onClick={exportCSV}>📄 Exporter CSV</button>
+            </div>
+          </div>
+        )}
+      </div>
+
+      <StatusBar items={[
+        processing ? `⏳ ${progress}%` : done ? `✓ ${results.length} lignes` : "En attente",
+        form.projet || "Projet ?",
+        form.journal || "Journal ?",
+        form.exercice || "—",
+        form.taux ? `${parseInt(form.taux).toLocaleString("fr-FR")} CDF/USD` : "",
+      ]} />
+
+      {/* MODAL COMPTE MANQUANT */}
+      {missing && (
+        <div className="modal-bg">
+          <div className="modal-box">
+            <div className="modal-title">🔗 Compte absent — {missing.compte}</div>
+            <div className="modal-body">
+              <Alert type="warn" icon="⚠">
+                Le compte TomPro <b>{missing.compte}</b> n'a pas de correspondance SNEL. Créez-la pour continuer le traitement.
+              </Alert>
+              <FormRow label="Compte TomPro :"      lw={170}><W11Input value={newCorr.compteTompro}  readOnly style={{ width: 160 }} /></FormRow>
+              <FormRow label="Libellé TomPro :"     lw={170}><W11Input value={newCorr.libelleTompro} onChange={v => setNewCorr(f => ({ ...f, libelleTompro: v }))} style={{ width: 210 }} /></FormRow>
+              <FormRow label="Compte SNEL (11 car.) :" lw={170}><W11Input value={newCorr.compteSnell} onChange={v => setNewCorr(f => ({ ...f, compteSnell: v.slice(0, 11) }))} style={{ width: 160 }} /></FormRow>
+              <FormRow label="Libellé SNEL :"       lw={170}><W11Input value={newCorr.libelleSnell}  onChange={v => setNewCorr(f => ({ ...f, libelleSnell: v }))}  style={{ width: 210 }} /></FormRow>
+            </div>
+            <div className="modal-footer">
+              <button className="w11-btn" onClick={() => { setMissing(null); setProcessing(false); }}>⏹ Annuler traitement</button>
+              <button className="w11-btn primary" onClick={saveMissing} disabled={!newCorr.compteSnell}>💾 Créer et Continuer ⚡</button>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+/* ══════════════════════════════════════════════
+   DÉFINITIONS DES FENÊTRES MDI
+══════════════════════════════════════════════ */
+const WIN_DEFS = {
+  traitement: { title: "Traitement — Moulinette TomPro → SNEL", icon: "⚡", w: 860, h: 580 },
+  projets:    { title: "Structure — Liste des Projets",          icon: "📁", w: 560, h: 420 },
+  exercice:   { title: "Structure — Exercice Comptable",         icon: "📅", w: 640, h: 460 },
+  ccompteg:   { title: "Structure — Correspondances Comptes",    icon: "🔗", w: 720, h: 500 },
+  cjournal:   { title: "Structure — Journaux SNEL",              icon: "📓", w: 500, h: 400 },
+  cjnl:       { title: "Structure — Journaux TomPro",            icon: "📔", w: 580, h: 430 },
+  cgestionn:  { title: "Structure — Code Gestionnaire",          icon: "🏷️", w: 500, h: 380 },
+  csr:        { title: "Structure — Unité Budgétaire (CSR)",     icon: "🏢", w: 680, h: 500 },
+  users:      { title: "Administration — Utilisateurs",          icon: "👤", w: 660, h: 490 },
+  dbconfig:   { title: "Configuration Base de Données",          icon: "⚙️", w: 520, h: 420 },
+};
+
+/* ══════════════════════════════════════════════
+   APPLICATION PRINCIPALE
+══════════════════════════════════════════════ */
+function App() {
+  /* AUTH */
+  const [loggedIn,     setLoggedIn]     = useState(false);
+  const [dbConfigured, setDbConfigured] = useState(false);
+  const [currentUser,  setCurrentUser]  = useState(null);
+  const [loginForm,    setLoginForm]    = useState({ login: "administrateur", password: "" });
+  const [loginErr,     setLoginErr]     = useState("");
+
+  /* MDI */
+  const [windows,   setWindows]   = useState([]);
+  const [focusedId, setFocusedId] = useState(null);
+  const [openMenu,  setOpenMenu]  = useState(null);
+
+  /* DONNÉES */
+  const [users,    setUsers]    = useState(INIT.users);
+  const [projets,  setProjets]  = useState(INIT.projets);
+  const [exercices,setExercices]= useState(INIT.exercices);
+  const [ccompteg, setCcompteg] = useState(INIT.ccompteg);
+  const [cjournal, setCjournal] = useState(INIT.cjournal);
+  const [cjnl,     setCjnl]     = useState(INIT.cjnl);
+  const [cgestionn,setCgestionn]= useState(INIT.cgestionn);
+  const [csr,      setCsr]      = useState(INIT.csr);
+
+
+  /* Horloge */
+  const [clock, setClock] = useState(new Date().toLocaleTimeString("fr-FR"));
+  useEffect(() => {
+    const t = setInterval(() => setClock(new Date().toLocaleTimeString("fr-FR")), 1000);
+    return () => clearInterval(t);
+  }, []);
+
+  /* LOGIN */
+  const doLogin = () => {
+    const u = users.find(u => u.login === loginForm.login && u.mdp === loginForm.password && u.actif);
+    if (u) { setCurrentUser(u); setLoggedIn(true); setLoginErr(""); }
+    else setLoginErr("Login ou mot de passe incorrect.");
+  };
+
+  /* MDI ops */
+  const openWindow = useCallback((key) => {
+    setWindows(prev => {
+      if (prev.find(w => w.key === key)) { setFocusedId(key); return prev; }
+      const def = WIN_DEFS[key];
+      const off = prev.length * 28;
+      return [...prev, { key, x: 36 + off, y: 28 + off, w: def.w, h: def.h }];
+    });
+    setFocusedId(key);
+    setOpenMenu(null);
+  }, []);
+
+  const closeWindow = useCallback((key) => {
+    setWindows(prev => prev.filter(w => w.key !== key));
+    setFocusedId(prev => prev === key ? null : prev);
+  }, []);
+
+  /* Contenu de chaque fenêtre */
+  const renderContent = (key) => {
+    const trData = { projets, exercices, ccompteg, setCcompteg, cjournal, cjnl, cgestionn, csr };
+    switch (key) {
+      case "traitement": return <TraitementScreen data={trData} />;
+      case "projets":    return <ProjetsScreen   data={projets}   setData={setProjets} />;
+      case "exercice":   return <ExerciceScreen  data={exercices} setData={setExercices} />;
+      case "ccompteg":   return <CComptegScreen  data={ccompteg}  setData={setCcompteg} />;
+      case "cjournal":   return <CJournalScreen  data={cjournal}  setData={setCjournal} />;
+      case "cjnl":       return <CJNLScreen      data={cjnl}      setData={setCjnl} />;
+      case "cgestionn":  return <CGestionnScreen data={cgestionn} setData={setCgestionn} />;
+      case "csr":        return <CSRScreen       data={csr}       setData={setCsr} />;
+      case "users":      return <UsersScreen     data={users}     setData={setUsers} />;
+      case "dbconfig":   return <DBConfigScreen  onSave={() => { setDbConfigured(true); closeWindow("dbconfig"); }} />;
+      default: return null;
+    }
+  };
+
+  /* ── ÉCRAN LOGIN ── */
+  if (!loggedIn) return (
+    <div className="login-shell">
+      <div className="login-card">
+        <div className="login-header">
+          <span style={{ display: "flex", alignItems: "center", gap: 7, fontSize: 12, fontWeight: 600 }}>
+            <span style={{ fontSize: 15 }}>🔄</span> Moulinette TomPro → SNEL
+          </span>
+          <div style={{ display: "flex" }}>
+            {["—", "□", "✕"].map(c => (
+              <button key={c} style={{ width: 40, height: 28, border: "none", background: "transparent", cursor: "pointer", fontSize: 10, display: "flex", alignItems: "center", justifyContent: "center" }}>{c}</button>
+            ))}
+          </div>
+        </div>
+        <div className="login-body">
+          <div style={{ textAlign: "center", marginBottom: 22 }}>
+            <div style={{ fontSize: 44, lineHeight: 1 }}>🔄</div>
+            <p style={{ fontSize: 16, fontWeight: 600, color: "#1C1C1C", marginTop: 10 }}>Moulinette TomPro → SNEL</p>
+            <p style={{ fontSize: 12, color: "#5D5D5D", marginTop: 3 }}>Société SNEL — v1.0.0</p>
+          </div>
+          {loginErr && <Alert type="err" icon="✕">{loginErr}</Alert>}
+          <div style={{ marginBottom: 12 }}>
+            <label className="w11-label">Nom d'utilisateur</label>
+            <input className="w11-input full-input" value={loginForm.login}
+              onChange={e => setLoginForm(f => ({ ...f, login: e.target.value }))} />
+          </div>
+          <div style={{ marginBottom: 8 }}>
+            <label className="w11-label">Mot de passe</label>
+            <input type="password" className="w11-input full-input" value={loginForm.password}
+              onChange={e => setLoginForm(f => ({ ...f, password: e.target.value }))}
+              onKeyDown={e => e.key === "Enter" && doLogin()} />
+          </div>
+          <p style={{ fontSize: 10, color: "#888", marginBottom: 16 }}>
+            Démo : <b>administrateur</b> / <b>admin123</b>
+          </p>
+          <div style={{ display: "flex", justifyContent: "flex-end", gap: 8 }}>
+            <button className="w11-btn">Annuler</button>
+            <button className="w11-btn primary" onClick={doLogin}>🔓 Se connecter</button>
+          </div>
+        </div>
+        <div className="login-footer">© 2026 Softwell Madagascar</div>
+      </div>
+    </div>
+  );
+
+  /* ── ÉCRAN CONFIG BDD ── */
+  if (!dbConfigured) return (
+    <div style={{ display: "flex", alignItems: "center", justifyContent: "center", height: "100vh", background: "#F3F3F3" }}>
+      <div style={{ width: 540, background: "#FFFFFF", borderRadius: 12, boxShadow: "0 8px 32px rgba(0,0,0,0.12), inset 0 0 0 1px rgba(0,0,0,0.09)", overflow: "hidden" }}>
+        <div style={{ background: "#FAFAFA", borderBottom: "1px solid rgba(0,0,0,0.08)", padding: "10px 14px", borderRadius: "12px 12px 0 0", display: "flex", alignItems: "center", gap: 8 }}>
+          <span style={{ fontSize: 14 }}>⚙️</span>
+          <span style={{ fontSize: 12, fontWeight: 600 }}>Configuration Base de Données — Première connexion</span>
+        </div>
+        <DBConfigScreen onSave={() => setDbConfigured(true)} />
+      </div>
+    </div>
+  );
+
+  /* ── APPLICATION PRINCIPALE MDI ── */
+  const MENUS = {
+    Fichier: [
+      { l: "🔓 Déconnexion", a: () => { setLoggedIn(false); setCurrentUser(null); setDbConfigured(false); setWindows([]); } },
+    ],
+    Structure: [
+      { l: "📁 Projets",                      a: () => openWindow("projets") },
+      { l: "📅 Exercice Comptable",            a: () => openWindow("exercice") },
+      { l: "🔗 Correspondances Comptes (CCOMPTEG)", a: () => openWindow("ccompteg") },
+      { l: "📓 Journaux SNEL (CJOURNAL)",      a: () => openWindow("cjournal") },
+      { l: "📔 Journaux TomPro (CJNL)",        a: () => openWindow("cjnl") },
+      { l: "🏷️ Code Gestionnaire (CGESTIONN)", a: () => openWindow("cgestionn") },
+      { l: "🏢 Unité Budgétaire (CSR)",        a: () => openWindow("csr") },
+    ],
+    Traitement: [
+      { l: "⚡ Lancer le Traitement", a: () => openWindow("traitement") },
+    ],
+    Administration: [
+      { l: "👤 Gestion Utilisateurs",    a: () => openWindow("users") },
+      { l: "⚙️ Configuration BDD",       a: () => openWindow("dbconfig") },
+    ],
+  };
+
+  return (
+    <div className="shell" onClick={() => setOpenMenu(null)}>
+
+      {/* BARRE DE MENU GLOBALE */}
+      <div className="global-menu" onClick={e => e.stopPropagation()}>
+        <div className="global-menu-brand">
+          <span style={{ fontSize: 15 }}>🔄</span> Moulinette TomPro → SNEL
+        </div>
+        {Object.entries(MENUS).map(([name, items]) => (
+          <div key={name} style={{ position: "relative" }}>
+            <button className={`menu-btn${openMenu === name ? " open" : ""}`}
+              onClick={() => setOpenMenu(openMenu === name ? null : name)}>
+              {name}
+            </button>
+            {openMenu === name && (
+              <div className="dropdown">
+                {items.map(it => (
+                  <button key={it.l} className="dd-item" onClick={it.a}>{it.l}</button>
+                ))}
+              </div>
+            )}
+          </div>
+        ))}
+        <div style={{ marginLeft: "auto", display: "flex", alignItems: "center", gap: 10 }}>
+          <Badge label={currentUser?.role} bg={currentUser?.role === "ADMIN" ? "#FBEBE9" : "#E6F1FB"} color={currentUser?.role === "ADMIN" ? "#710F0F" : "#003E7E"} />
+          <span style={{ fontSize: 11, color: "#5D5D5D" }}>{currentUser?.nom}</span>
+        </div>
+      </div>
+
+      {/* BUREAU MDI */}
+      <div className="desktop">
+        {windows.length === 0 && (
+          <div className="desktop-hint">
+            <div className="ico">🔄</div>
+            <p>Utilisez le menu pour ouvrir des fenêtres</p>
+          </div>
+        )}
+        {windows.map(w => {
+          const def = WIN_DEFS[w.key];
+          return (
+            <MdiWindow key={w.key} id={w.key} title={def.title} icon={def.icon}
+              width={w.w} height={w.h} posX={w.x} posY={w.y}
+              focused={focusedId === w.key}
+              onFocus={() => setFocusedId(w.key)}
+              onClose={() => closeWindow(w.key)}>
+              {renderContent(w.key)}
+            </MdiWindow>
+          );
+        })}
+      </div>
+
+      {/* BARRE DES TÂCHES */}
+      <div className="taskbar">
+        {windows.map(w => {
+          const def = WIN_DEFS[w.key];
+          return (
+            <button key={w.key} className={`task-btn${focusedId === w.key ? " active" : ""}`}
+              onClick={() => setFocusedId(w.key)}>
+              <span style={{ fontSize: 14, flexShrink: 0 }}>{def.icon}</span>
+              <span className="task-btn-label">{def.title.split(" — ")[0]}</span>
+              <span className="task-close" onClick={e => { e.stopPropagation(); closeWindow(w.key); }}>✕</span>
+            </button>
+          );
+        })}
+        <div className="taskbar-clock">{clock} &nbsp; {new Date().toLocaleDateString("fr-FR")}</div>
+      </div>
+    </div>
+  );
+}
+
+
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(<App />);
+  </script>
+</body>
+</html>

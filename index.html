@@ -8,6 +8,7 @@
   <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
   <style>
+
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body { font-family: 'Segoe UI Variable', 'Segoe UI', system-ui, sans-serif;
          font-size: 13px; background: #F3F3F3; height: 100vh; overflow: hidden; }
@@ -192,6 +193,8 @@
     padding: 8px 16px; text-align: center; font-size: 10px; color: #999;
     border-radius: 0 0 12px 12px; }
   .full-input { display: block; width: 100%; }
+
+
   </style>
 </head>
 <body>
@@ -214,64 +217,62 @@ const INIT = {
     { id: 3, code: "PROJ003", libelle: "Extension Réseau Goma" },
   ],
   exercices: [
-    { id: 1, code: "2024", libelle: "Exercice 2024", dateDebut: "2024-01-01", dateFin: "2024-12-31", statut: "Clôturé" },
-    { id: 2, code: "2025", libelle: "Exercice 2025", dateDebut: "2025-01-01", dateFin: "2025-12-31", statut: "En cours" },
-    { id: 3, code: "2026", libelle: "Exercice 2026", dateDebut: "2026-01-01", dateFin: "2026-12-31", statut: "Futur" },
+    { id: 1, code: "2024", libelle: "Exercice 2024", dateDebut: "2024-01-01", dateFin: "2024-12-31", statut: "Clôturé",  projet: "PROJ001" },
+    { id: 2, code: "2025", libelle: "Exercice 2025", dateDebut: "2025-01-01", dateFin: "2025-12-31", statut: "En cours", projet: "PROJ001" },
+    { id: 3, code: "2026", libelle: "Exercice 2026", dateDebut: "2026-01-01", dateFin: "2026-12-31", statut: "Futur",    projet: "PROJ002" },
   ],
   ccompteg: [
-    { id: 1, compteTompro: "601100", libelleTompro: "Achats matières premières", compteSnell: "60110000000", libelleSnell: "Achats mat. — SNEL" },
-    { id: 2, compteTompro: "401000", libelleTompro: "Fournisseurs",              compteSnell: "40100000000", libelleSnell: "Fournisseurs locaux" },
-    { id: 3, compteTompro: "512000", libelleTompro: "Banques",                   compteSnell: "51200000000", libelleSnell: "Compte bancaire" },
-    { id: 4, compteTompro: "701000", libelleTompro: "Ventes produits finis",     compteSnell: "70100000000", libelleSnell: "Ventes — électricité" },
+    { id: 1, compteTompro: "601100", libelleTompro: "Achats matières premières", compteSnell: "60110000000", libelleSnell: "Achats mat. SNEL",    projet: "PROJ001" },
+    { id: 2, compteTompro: "401000", libelleTompro: "Fournisseurs",              compteSnell: "40100000000", libelleSnell: "Fournisseurs locaux",  projet: "PROJ001" },
+    { id: 3, compteTompro: "512000", libelleTompro: "Banques",                   compteSnell: "51200000000", libelleSnell: "Compte bancaire",      projet: "PROJ002" },
+    { id: 4, compteTompro: "701000", libelleTompro: "Ventes produits finis",     compteSnell: "70100000000", libelleSnell: "Ventes electricite",   projet: "PROJ002" },
   ],
   cjournal: [
-    { id: 1, code: "AC", libelle: "Journal des Achats" },
-    { id: 2, code: "VT", libelle: "Journal des Ventes" },
-    { id: 3, code: "BQ", libelle: "Journal de Banque" },
-    { id: 4, code: "OD", libelle: "Opérations Diverses" },
+    { id: 1, code: "01", libelle: "Journal des Achats",  statut: "Actif"   },
+    { id: 2, code: "02", libelle: "Journal des Ventes",  statut: "Inactif" },
+    { id: 3, code: "03", libelle: "Journal de Banque",   statut: "Inactif" },
+    { id: 4, code: "04", libelle: "Operations Diverses", statut: "Inactif" },
   ],
   cjnl: [
-    { id: 1, code: "ACHATS", libelle: "Journal Achats TomPro",  comptePrincipal: "601100" },
-    { id: 2, code: "VENTES", libelle: "Journal Ventes TomPro",  comptePrincipal: "701000" },
-    { id: 3, code: "BANQUE", libelle: "Journal Banque TomPro",  comptePrincipal: "512000" },
+    { id: 1, code: "ACHATS", libelle: "Journal Achats TomPro", comptePrincipal: "601100", projet: "PROJ001" },
+    { id: 2, code: "VENTES", libelle: "Journal Ventes TomPro", comptePrincipal: "701000", projet: "PROJ001" },
+    { id: 3, code: "BANQUE", libelle: "Journal Banque TomPro", comptePrincipal: "512000", projet: "PROJ002" },
   ],
   cgestionn: [
-    { id: 1, code: "0001", libelle: "Direction Financière" },
-    { id: 2, code: "0002", libelle: "Direction Technique" },
+    { id: 1, code: "0001", libelle: "Direction Financière"  },
+    { id: 2, code: "0002", libelle: "Direction Technique"   },
     { id: 3, code: "0010", libelle: "Direction Commerciale" },
   ],
   csr: [
-    { id: 1, code: "KA0123", libelle: "Kinshasa — Zone A",     cfiliere: "K", cregion: "A", cemet: "0123" },
-    { id: 2, code: "GM0789", libelle: "Goma — Masisi",          cfiliere: "G", cregion: "M", cemet: "0789" },
-    { id: 3, code: "LB1011", libelle: "Lubumbashi — Centre",    cfiliere: "L", cregion: "B", cemet: "1011" },
+    { id: 1, code: "1A0123", libelle: "Kinshasa Zone A",      cfiliere: "1", cregion: "A", cemet: "0123", statut: "Actif"   },
+    { id: 2, code: "2M0789", libelle: "Goma Masisi",           cfiliere: "2", cregion: "M", cemet: "0789", statut: "Inactif" },
+    { id: 3, code: "3B1011", libelle: "Lubumbashi Centre",     cfiliere: "3", cregion: "B", cemet: "1011", statut: "Inactif" },
   ],
+  audit: [],
 };
 
-/* Données TomPro simulées */
 const TOMPRO_RAW = [
-  { numPiece: "042", libelle: "Achat matériels réseau",        compteDebT: "601100", compteCrT: "401000", montantDev: 100,  date: "15/03/2025", journal: "ACHATS" },
-  { numPiece: "043", libelle: "Fournitures bureau",             compteDebT: "601100", compteCrT: "401000", montantDev: 20,   date: "18/03/2025", journal: "ACHATS" },
-  { numPiece: "044", libelle: "Vente électricité mars",         compteDebT: "512000", compteCrT: "701000", montantDev: 350,  date: "20/03/2025", journal: "VENTES" },
-  { numPiece: "045", libelle: "Paiement fournisseur local",     compteDebT: "401000", compteCrT: "512000", montantDev: 80,   date: "22/03/2025", journal: "BANQUE" },
-  { numPiece: "046", libelle: "Achat câbles électriques",       compteDebT: "601100", compteCrT: "401000", montantDev: 450,  date: "25/03/2025", journal: "ACHATS" },
-  { numPiece: "047", libelle: "Vente prestation technique",     compteDebT: "512000", compteCrT: "701000", montantDev: 200,  date: "26/03/2025", journal: "VENTES" },
+  { numPiece: "042", libelle: "Achat materiels reseau",    compteDebT: "601100", compteCrT: "401000", montantDev: 100,  date: "15/03/2025", journal: "ACHATS" },
+  { numPiece: "043", libelle: "Fournitures bureau",         compteDebT: "601100", compteCrT: "401000", montantDev: 20,   date: "18/03/2025", journal: "ACHATS" },
+  { numPiece: "044", libelle: "Vente electricite mars",     compteDebT: "512000", compteCrT: "701000", montantDev: 350,  date: "20/03/2025", journal: "VENTES" },
+  { numPiece: "045", libelle: "Paiement fournisseur local", compteDebT: "401000", compteCrT: "512000", montantDev: 80,   date: "22/03/2025", journal: "BANQUE" },
+  { numPiece: "046", libelle: "Achat cables electriques",   compteDebT: "601100", compteCrT: "401000", montantDev: 450,  date: "25/03/2025", journal: "ACHATS" },
+  { numPiece: "047", libelle: "Vente prestation technique", compteDebT: "512000", compteCrT: "701000", montantDev: 200,  date: "26/03/2025", journal: "VENTES" },
 ];
 
-/* ══════════════════════════════════════════════
-   HELPERS
-══════════════════════════════════════════════ */
+/* HELPERS */
+const validateCSRFormat = (code) => /^\d[A-Za-z]\d{4}$/.test(code);
 const extractCSR = (code) => {
   if (!code || code.length < 6) return { cfiliere: "", cregion: "", cemet: "" };
-  return { cfiliere: code[0], cregion: code[1], cemet: code.slice(2) };
+  return { cfiliere: code[0], cregion: code[1], cemet: code.slice(2, 6) };
 };
 const buildAFOLI = (jnl, annee, mois, seq) =>
   `${(jnl || "  ").substring(0, 2).toUpperCase()}${String(annee).slice(-2)}${String(mois).padStart(2, "0")}${String(seq).padStart(3, "0")}`;
 const genFileName = (annee, moisNum) =>
   `CDP${String(annee).slice(-3)}${String(moisNum).padStart(2, "0")}`;
+const nowStr = () => new Date().toLocaleString("fr-FR");
 
-/* ══════════════════════════════════════════════
-   DRAG HOOK
-══════════════════════════════════════════════ */
+/* DRAG HOOK */
 function useDrag(handleRef, winRef) {
   const drag = useRef(null);
   useEffect(() => {
@@ -303,9 +304,7 @@ function useDrag(handleRef, winRef) {
   }, []);
 }
 
-/* ══════════════════════════════════════════════
-   MDI WINDOW
-══════════════════════════════════════════════ */
+/* MDI WINDOW */
 function MdiWindow({ id, title, icon, width, height, posX, posY, focused, onFocus, onClose, children }) {
   const winRef = useRef(null);
   const tbRef  = useRef(null);
@@ -328,30 +327,29 @@ function MdiWindow({ id, title, icon, width, height, posX, posY, focused, onFocu
   );
 }
 
-/* ══════════════════════════════════════════════
-   COMPOSANTS PARTAGÉS
-══════════════════════════════════════════════ */
+/* COMPOSANTS PARTAGES */
 const Alert = ({ type, icon, children }) => (
   <div className={`alert ${type}`}><span style={{ flexShrink: 0 }}>{icon}</span><span>{children}</span></div>
 );
-
 const Badge = ({ label, bg, color }) => (
   <span className="badge" style={{ background: bg, color }}>{label}</span>
 );
+const StatutBadge = ({ statut }) => {
+  const s = statut === "Actif"
+    ? { bg: "#E6F4E6", color: "#0C4B0C" }
+    : { bg: "#F0F0F0", color: "#5F5E5A" };
+  return <Badge label={statut} bg={s.bg} color={s.color} />;
+};
 
 function DataGrid({ cols, rows, selId, onSel }) {
   return (
     <div className="grid-wrap">
       <table className="w11-grid">
-        <thead>
-          <tr>{cols.map(c => <th key={c.k}>{c.l}</th>)}</tr>
-        </thead>
+        <thead><tr>{cols.map(c => <th key={c.k}>{c.l}</th>)}</tr></thead>
         <tbody>
           {rows.map((r, i) => (
             <tr key={r.id ?? i} className={r.id === selId ? "sel" : ""} onClick={() => onSel && onSel(r)}>
-              {cols.map(c => (
-                <td key={c.k}>{c.render ? c.render(r) : r[c.k]}</td>
-              ))}
+              {cols.map(c => <td key={c.k}>{c.render ? c.render(r) : r[c.k]}</td>)}
             </tr>
           ))}
           {!rows.length && (
@@ -409,50 +407,48 @@ function StatusBar({ items }) {
   );
 }
 
-/* ══════════════════════════════════════════════
-   CRUD SCREEN GÉNÉRIQUE
-══════════════════════════════════════════════ */
-function CrudScreen({ title, icon, cols, rows, setRows, fields, empty, validate, extra = "" }) {
-  const [sel, setSel]     = useState(null);
-  const [form, setForm]   = useState(empty);
-  const [mode, setMode]   = useState("view");
-  const [msg, setMsg]     = useState(null);
-  const [del, setDel]     = useState(false);
-
+/* CRUD SCREEN GENERIQUE */
+function CrudScreen({ title, icon, cols, rows, setRows, fields, empty, validate, extra = "", onAudit }) {
+  const [sel, setSel]   = useState(null);
+  const [form, setForm] = useState(empty);
+  const [mode, setMode] = useState("view");
+  const [msg, setMsg]   = useState(null);
+  const [del, setDel]   = useState(false);
   const upd = (k, v) => setForm(f => ({ ...f, [k]: v }));
-
-  const startNew  = () => { setForm({ ...empty }); setSel(null); setMode("new");  setMsg(null); };
+  const startNew  = () => { setForm({ ...empty }); setSel(null); setMode("new"); setMsg(null); };
   const startEdit = () => { if (!sel) return; setForm({ ...sel }); setMode("edit"); setMsg(null); };
   const cancel    = () => { setMode("view"); setMsg(null); setSel(null); setForm(empty); };
-
   const save = () => {
     const err = validate(form, rows, mode === "edit" ? sel?.id : null);
     if (err) { setMsg({ t: "err", m: err }); return; }
+    const k0 = cols[0].k;
     if (mode === "new") {
       const nr = { ...form, id: Date.now() };
       setRows(p => [...p, nr]); setSel(nr);
+      onAudit && onAudit("Création", `${title} | ${k0}: ${form[k0]}`);
     } else {
       setRows(p => p.map(r => r.id === sel.id ? { ...form, id: r.id } : r));
       setSel({ ...form, id: sel.id });
+      onAudit && onAudit("Modification", `${title} | ${k0}: ${form[k0]}`);
     }
     setMode("view"); setMsg({ t: "ok", m: "Enregistrement sauvegardé." });
   };
-
   const doDelete = () => {
+    const k0 = cols[0].k;
+    onAudit && onAudit("Suppression", `${title} | ${k0}: ${sel[k0]}`);
     setRows(p => p.filter(r => r.id !== sel.id));
     setSel(null); setMode("view"); setDel(false);
-    setMsg({ t: "ok", m: "Enregistrement supprimé." });
+    setMsg({ t: "ok", m: "Supprimé." });
   };
-
   return (
     <div style={{ display: "flex", flexDirection: "column", height: "100%" }}>
       <Toolbar btns={[
-        { icon: "➕", label: "Nouveau",    onClick: startNew },
-        { icon: "✏️", label: "Modifier",   onClick: startEdit,  disabled: !sel },
-        { icon: "🗑️", label: "Supprimer",  onClick: () => sel && setDel(true), disabled: !sel },
+        { icon: "➕", label: "Nouveau",     onClick: startNew },
+        { icon: "✏️", label: "Modifier",    onClick: startEdit, disabled: !sel },
+        { icon: "🗑️", label: "Supprimer",   onClick: () => sel && setDel(true), disabled: !sel },
         "|",
-        { icon: "↩️", label: "Annuler",    onClick: cancel,     disabled: mode === "view" },
-        { icon: "💾", label: "Enregistrer",onClick: save,       disabled: mode === "view" },
+        { icon: "↩️", label: "Annuler",     onClick: cancel,    disabled: mode === "view" },
+        { icon: "💾", label: "Enregistrer", onClick: save,      disabled: mode === "view" },
       ]} />
       <div className="content">
         <div className="section-bar">{icon} {title}</div>
@@ -467,14 +463,11 @@ function CrudScreen({ title, icon, cols, rows, setRows, fields, empty, validate,
         )}
       </div>
       <StatusBar items={[`${rows.length} enreg.`, sel ? `Sél. : ${sel[cols[0].k]}` : "", extra]} />
-
       {del && (
         <div className="modal-bg">
           <div className="modal-box">
             <div className="modal-title">🗑️ Confirmer la suppression</div>
-            <div className="modal-body">
-              <Alert type="warn" icon="⚠">Voulez-vous supprimer cet enregistrement ? Action irréversible.</Alert>
-            </div>
+            <div className="modal-body"><Alert type="warn" icon="⚠">Action irréversible.</Alert></div>
             <div className="modal-footer">
               <button className="w11-btn" onClick={() => setDel(false)}>Annuler</button>
               <button className="w11-btn danger" onClick={doDelete}>🗑️ Supprimer</button>
@@ -486,113 +479,118 @@ function CrudScreen({ title, icon, cols, rows, setRows, fields, empty, validate,
   );
 }
 
-/* ══════════════════════════════════════════════
-   ÉCRANS STRUCTURE
-══════════════════════════════════════════════ */
-function ProjetsScreen({ data, setData }) {
+/* PROJETS */
+function ProjetsScreen({ data, setData, onAudit }) {
   return (
     <CrudScreen title="Liste des Projets (PROJET)" icon="📁"
       cols={[{ k: "code", l: "Code Projet" }, { k: "libelle", l: "Libellé" }]}
-      rows={data} setRows={setData} empty={{ code: "", libelle: "" }}
+      rows={data} setRows={setData} empty={{ code: "", libelle: "" }} onAudit={onAudit}
       validate={(f, rows, eid) => {
         if (!f.code.trim()) return "Code projet obligatoire.";
-        if (rows.some(r => r.code === f.code && r.id !== eid)) return "Ce code existe déjà.";
+        if (rows.some(r => r.code === f.code && r.id !== eid)) return "Code existant.";
       }}
       fields={(f, set) => <>
-        <FormRow label="Code Projet :" lw={130}>
-          <W11Input value={f.code} onChange={v => set("code", v.toUpperCase())} style={{ width: 140 }} />
-        </FormRow>
-        <FormRow label="Libellé :" lw={130}>
-          <W11Input value={f.libelle} onChange={v => set("libelle", v)} style={{ width: 320 }} />
-        </FormRow>
+        <FormRow label="Code Projet :" lw={130}><W11Input value={f.code} onChange={v => set("code", v.toUpperCase())} style={{ width: 140 }} /></FormRow>
+        <FormRow label="Libellé :"     lw={130}><W11Input value={f.libelle} onChange={v => set("libelle", v)} style={{ width: 320 }} /></FormRow>
       </>}
     />
   );
 }
 
-function ExerciceScreen({ data, setData }) {
-  const statusStyle = { "En cours": ["#EAF3DE", "#3B6D11"], "Clôturé": ["#F0F0F0", "#5F5E5A"], "Futur": ["#E6F1FB", "#0C447C"] };
+/* EXERCICE — avec champ Projet */
+function ExerciceScreen({ data, setData, projets, onAudit }) {
+  const ss = { "En cours": ["#EAF3DE", "#3B6D11"], "Clôturé": ["#F0F0F0", "#5F5E5A"], "Futur": ["#E6F1FB", "#0C447C"] };
   return (
     <CrudScreen title="Exercice Comptable" icon="📅"
       cols={[
-        { k: "code",     l: "Code" },
-        { k: "libelle",  l: "Libellé" },
-        { k: "dateDebut",l: "Date Début" },
-        { k: "dateFin",  l: "Date Fin" },
-        { k: "statut",   l: "Statut", render: r => {
-          const [bg, color] = statusStyle[r.statut] || ["#eee", "#333"];
-          return <Badge label={r.statut} bg={bg} color={color} />;
-        }},
+        { k: "projet",  l: "Projet" },
+        { k: "code",    l: "Code" },
+        { k: "libelle", l: "Libellé" },
+        { k: "dateDebut", l: "Début" },
+        { k: "dateFin",   l: "Fin" },
+        { k: "statut",  l: "Statut", render: r => { const [bg, c] = ss[r.statut] || ["#eee","#333"]; return <Badge label={r.statut} bg={bg} color={c} />; }},
       ]}
       rows={data} setRows={setData}
-      empty={{ code: "", libelle: "", dateDebut: "", dateFin: "", statut: "En cours" }}
+      empty={{ projet: "", code: "", libelle: "", dateDebut: "", dateFin: "", statut: "En cours" }}
+      onAudit={onAudit}
       validate={(f, rows, eid) => {
+        if (!f.projet)  return "Projet obligatoire.";
         if (!f.code.trim() || !f.dateDebut || !f.dateFin) return "Tous les champs sont obligatoires.";
-        if (rows.some(r => r.code === f.code && r.id !== eid)) return "Code exercice déjà existant.";
+        if (rows.some(r => r.code === f.code && r.projet === f.projet && r.id !== eid)) return "Code exercice déjà existant pour ce projet.";
       }}
       fields={(f, set) => (
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "4px 20px" }}>
-          <FormRow label="Code :" lw={100}><W11Input value={f.code} onChange={v => set("code", v)} style={{ width: 100 }} /></FormRow>
-          <FormRow label="Libellé :" lw={80}><W11Input value={f.libelle} onChange={v => set("libelle", v)} style={{ width: 200 }} /></FormRow>
-          <FormRow label="Date début :" lw={100}><W11Input type="date" value={f.dateDebut} onChange={v => set("dateDebut", v)} style={{ width: 145 }} /></FormRow>
-          <FormRow label="Date fin :" lw={80}><W11Input type="date" value={f.dateFin} onChange={v => set("dateFin", v)} style={{ width: 145 }} /></FormRow>
-          <FormRow label="Statut :" lw={100}>
+          <FormRow label="Projet :" lw={110}>
+            <W11Select value={f.projet} onChange={v => set("projet", v)}
+              opts={projets.map(p => ({ v: p.code, l: `${p.code} — ${p.libelle}` }))} style={{ width: 220 }} />
+          </FormRow>
+          <FormRow label="Code :" lw={80}><W11Input value={f.code} onChange={v => set("code", v)} style={{ width: 100 }} /></FormRow>
+          <FormRow label="Libellé :" lw={110}><W11Input value={f.libelle} onChange={v => set("libelle", v)} style={{ width: 200 }} /></FormRow>
+          <FormRow label="Statut :" lw={80}>
             <select className="w11-select" value={f.statut} onChange={e => set("statut", e.target.value)} style={{ width: 140 }}>
               {["En cours", "Clôturé", "Futur"].map(s => <option key={s}>{s}</option>)}
             </select>
           </FormRow>
+          <FormRow label="Date début :" lw={110}><W11Input type="date" value={f.dateDebut} onChange={v => set("dateDebut", v)} style={{ width: 145 }} /></FormRow>
+          <FormRow label="Date fin :"   lw={80}><W11Input type="date" value={f.dateFin}   onChange={v => set("dateFin", v)}   style={{ width: 145 }} /></FormRow>
         </div>
       )}
     />
   );
 }
 
-function CComptegScreen({ data, setData }) {
+/* CCOMPTEG — avec champ Projet */
+function CComptegScreen({ data, setData, projets, onAudit }) {
   const [search, setSearch] = useState("");
   const [sel,    setSel]    = useState(null);
-  const [form,   setForm]   = useState({ compteTompro: "", libelleTompro: "", compteSnell: "", libelleSnell: "" });
+  const [form,   setForm]   = useState({ projet: "", compteTompro: "", libelleTompro: "", compteSnell: "", libelleSnell: "" });
   const [mode,   setMode]   = useState("view");
   const [msg,    setMsg]    = useState(null);
   const upd = (k, v) => setForm(f => ({ ...f, [k]: v }));
-
   const filtered = data.filter(r =>
+    (r.projet || "").toLowerCase().includes(search.toLowerCase()) ||
     r.compteTompro.includes(search) ||
     r.libelleTompro.toLowerCase().includes(search.toLowerCase()) ||
     r.compteSnell.includes(search)
   );
-
   const save = () => {
+    if (!form.projet)                   { setMsg({ t: "err", m: "Projet obligatoire." }); return; }
     if (!form.compteTompro.trim() || !form.compteSnell.trim()) { setMsg({ t: "err", m: "Comptes obligatoires." }); return; }
-    if (form.compteSnell.length > 11) { setMsg({ t: "err", m: "Compte SNEL : max 11 car." }); return; }
-    if (mode === "new" && data.some(r => r.compteTompro === form.compteTompro)) { setMsg({ t: "err", m: "Compte TomPro déjà enregistré." }); return; }
-    if (mode === "new") setData(p => [...p, { ...form, id: Date.now() }]);
-    else setData(p => p.map(r => r.id === sel.id ? { ...form, id: r.id } : r));
+    if (form.compteSnell.length > 11)   { setMsg({ t: "err", m: "Compte SNEL : max 11 car." }); return; }
+    if (mode === "new" && data.some(r => r.compteTompro === form.compteTompro && r.projet === form.projet))
+      { setMsg({ t: "err", m: "Déjà enregistré pour ce projet." }); return; }
+    if (mode === "new") { setData(p => [...p, { ...form, id: Date.now() }]); onAudit && onAudit("Création", `CCOMPTEG | ${form.compteTompro}→${form.compteSnell} (${form.projet})`); }
+    else               { setData(p => p.map(r => r.id === sel.id ? { ...form, id: r.id } : r)); onAudit && onAudit("Modification", `CCOMPTEG | ${form.compteTompro} (${form.projet})`); }
     setMode("view"); setMsg({ t: "ok", m: "Correspondance enregistrée." });
   };
-
+  const doDelete = () => {
+    onAudit && onAudit("Suppression", `CCOMPTEG | ${sel.compteTompro} (${sel.projet})`);
+    setData(p => p.filter(r => r.id !== sel.id)); setSel(null); setMsg({ t: "ok", m: "Supprimé." });
+  };
   return (
     <div style={{ display: "flex", flexDirection: "column", height: "100%" }}>
       <Toolbar btns={[
-        { icon: "➕", label: "Nouveau",    onClick: () => { setForm({ compteTompro: "", libelleTompro: "", compteSnell: "", libelleSnell: "" }); setSel(null); setMode("new"); setMsg(null); } },
-        { icon: "✏️", label: "Modifier",   onClick: () => { if (!sel) return; setForm({ ...sel }); setMode("edit"); setMsg(null); }, disabled: !sel },
-        { icon: "🗑️", label: "Supprimer",  onClick: () => { if (sel) { setData(p => p.filter(r => r.id !== sel.id)); setSel(null); } }, disabled: !sel },
+        { icon: "➕", label: "Nouveau",     onClick: () => { setForm({ projet: "", compteTompro: "", libelleTompro: "", compteSnell: "", libelleSnell: "" }); setSel(null); setMode("new"); setMsg(null); } },
+        { icon: "✏️", label: "Modifier",    onClick: () => { if (!sel) return; setForm({ ...sel }); setMode("edit"); setMsg(null); }, disabled: !sel },
+        { icon: "🗑️", label: "Supprimer",   onClick: () => { if (sel) doDelete(); }, disabled: !sel },
         "|",
-        { icon: "↩️", label: "Annuler",    onClick: () => { setMode("view"); setMsg(null); }, disabled: mode === "view" },
-        { icon: "💾", label: "Enregistrer",onClick: save, disabled: mode === "view" },
+        { icon: "↩️", label: "Annuler",     onClick: () => { setMode("view"); setMsg(null); }, disabled: mode === "view" },
+        { icon: "💾", label: "Enregistrer", onClick: save, disabled: mode === "view" },
       ]} />
       <div className="content">
         <div className="section-bar">🔗 Correspondances TomPro ↔ SNEL (CCOMPTEG)</div>
         <Alert type="info" icon="💡">Si une correspondance est absente lors du traitement, une fenêtre de création s'affiche automatiquement.</Alert>
         {msg && <Alert type={msg.t === "err" ? "err" : "ok"} icon={msg.t === "err" ? "✕" : "✓"}>{msg.m}</Alert>}
         <div style={{ display: "flex", gap: 6, marginBottom: 8 }}>
-          <W11Input value={search} onChange={setSearch} placeholder="🔍  Rechercher..." style={{ width: 280 }} />
+          <W11Input value={search} onChange={setSearch} placeholder="🔍 Rechercher (projet, compte...)" style={{ width: 300 }} />
           <button className="w11-btn" onClick={() => setSearch("")}>✕</button>
         </div>
         <DataGrid
           cols={[
+            { k: "projet",        l: "Projet" },
             { k: "compteTompro",  l: "Compte TomPro" },
             { k: "libelleTompro", l: "Libellé TomPro" },
-            { k: "compteSnell",   l: "Compte SNEL (11 car.)" },
+            { k: "compteSnell",   l: "Compte SNEL (11)" },
             { k: "libelleSnell",  l: "Libellé SNEL" },
           ]}
           rows={filtered} selId={sel?.id}
@@ -602,10 +600,14 @@ function CComptegScreen({ data, setData }) {
           <div className="group" style={{ marginTop: 10 }}>
             <span className="group-title">{mode === "new" ? "➕ Nouvelle correspondance" : "✏️ Modification"}</span>
             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "4px 20px" }}>
-              <FormRow label="Compte TomPro :"   lw={150}><W11Input value={form.compteTompro}  onChange={v => upd("compteTompro", v)}  style={{ width: 150 }} /></FormRow>
-              <FormRow label="Compte SNEL (11) :" lw={150}><W11Input value={form.compteSnell}   onChange={v => upd("compteSnell", v)}   maxLen={11} style={{ width: 150 }} /></FormRow>
-              <FormRow label="Libellé TomPro :"  lw={150}><W11Input value={form.libelleTompro} onChange={v => upd("libelleTompro", v)} style={{ width: 230 }} /></FormRow>
-              <FormRow label="Libellé SNEL :"    lw={150}><W11Input value={form.libelleSnell}  onChange={v => upd("libelleSnell", v)}  style={{ width: 230 }} /></FormRow>
+              <FormRow label="Projet :" lw={155}>
+                <W11Select value={form.projet} onChange={v => upd("projet", v)}
+                  opts={projets.map(p => ({ v: p.code, l: `${p.code} — ${p.libelle}` }))} style={{ width: 200 }} />
+              </FormRow>
+              <FormRow label="Compte SNEL (11) :" lw={155}><W11Input value={form.compteSnell} onChange={v => upd("compteSnell", v)} maxLen={11} style={{ width: 150 }} /></FormRow>
+              <FormRow label="Compte TomPro :"    lw={155}><W11Input value={form.compteTompro} onChange={v => upd("compteTompro", v)} style={{ width: 150 }} /></FormRow>
+              <FormRow label="Libellé SNEL :"     lw={155}><W11Input value={form.libelleSnell} onChange={v => upd("libelleSnell", v)} style={{ width: 220 }} /></FormRow>
+              <FormRow label="Libellé TomPro :"   lw={155}><W11Input value={form.libelleTompro} onChange={v => upd("libelleTompro", v)} style={{ width: 220 }} /></FormRow>
             </div>
           </div>
         )}
@@ -615,162 +617,259 @@ function CComptegScreen({ data, setData }) {
   );
 }
 
-function CJournalScreen({ data, setData }) {
+/* CJOURNAL — 2 chiffres num, statut, un seul Actif */
+function CJournalScreen({ data, setData, onAudit }) {
+  const [sel,  setSel]  = useState(null);
+  const [form, setForm] = useState({ code: "", libelle: "", statut: "Inactif" });
+  const [mode, setMode] = useState("view");
+  const [msg,  setMsg]  = useState(null);
+  const [del,  setDel]  = useState(false);
+  const upd = (k, v) => setForm(f => ({ ...f, [k]: v }));
+  const save = () => {
+    if (!/^\d{2}$/.test(form.code))  { setMsg({ t: "err", m: "Code : exactement 2 chiffres numériques." }); return; }
+    if (!form.libelle.trim())         { setMsg({ t: "err", m: "Libellé obligatoire." }); return; }
+    if (data.some(r => r.code === form.code && r.id !== (mode === "edit" ? sel?.id : null)))
+      { setMsg({ t: "err", m: "Ce code existe déjà." }); return; }
+    let newId = mode === "edit" ? sel.id : Date.now();
+    let nd = mode === "new"
+      ? [...data, { ...form, id: newId }]
+      : data.map(r => r.id === sel.id ? { ...form, id: r.id } : r);
+    if (form.statut === "Actif") nd = nd.map(r => r.id !== newId ? { ...r, statut: "Inactif" } : r);
+    setData(nd);
+    onAudit && onAudit(mode === "new" ? "Création" : "Modification", `CJOURNAL | code:${form.code} statut:${form.statut}`);
+    setMode("view"); setMsg({ t: "ok", m: "Journal enregistré." });
+  };
+  const doDelete = () => {
+    onAudit && onAudit("Suppression", `CJOURNAL | code:${sel.code}`);
+    setData(p => p.filter(r => r.id !== sel.id));
+    setSel(null); setMode("view"); setDel(false); setMsg({ t: "ok", m: "Supprimé." });
+  };
   return (
-    <CrudScreen title="Journaux SNEL (CJOURNAL)" icon="📓" extra="2 car. max"
-      cols={[{ k: "code", l: "Code (2 car.)" }, { k: "libelle", l: "Libellé" }]}
-      rows={data} setRows={setData} empty={{ code: "", libelle: "" }}
-      validate={(f, rows, eid) => {
-        if (!f.code.trim() || f.code.length > 2) return "Code : max 2 car. alphanumériques.";
-        if (rows.some(r => r.code === f.code && r.id !== eid)) return "Ce code existe déjà.";
-      }}
-      fields={(f, set) => <>
-        <FormRow label="Code Journal (max 2) :" lw={170}>
-          <W11Input value={f.code} onChange={v => set("code", v.toUpperCase().slice(0, 2))} maxLen={2} style={{ width: 60 }} />
-          <span style={{ fontSize: 10, color: "#888" }}>2 car. alphanumériques</span>
-        </FormRow>
-        <FormRow label="Libellé :" lw={170}>
-          <W11Input value={f.libelle} onChange={v => set("libelle", v)} style={{ width: 280 }} />
-        </FormRow>
-      </>}
-    />
+    <div style={{ display: "flex", flexDirection: "column", height: "100%" }}>
+      <Toolbar btns={[
+        { icon: "➕", label: "Nouveau",     onClick: () => { setForm({ code: "", libelle: "", statut: "Inactif" }); setSel(null); setMode("new"); setMsg(null); } },
+        { icon: "✏️", label: "Modifier",    onClick: () => { if (!sel) return; setForm({ ...sel }); setMode("edit"); setMsg(null); }, disabled: !sel },
+        { icon: "🗑️", label: "Supprimer",   onClick: () => sel && setDel(true), disabled: !sel },
+        "|",
+        { icon: "↩️", label: "Annuler",     onClick: () => { setMode("view"); setMsg(null); }, disabled: mode === "view" },
+        { icon: "💾", label: "Enregistrer", onClick: save, disabled: mode === "view" },
+      ]} />
+      <div className="content">
+        <div className="section-bar">📓 Journaux SNEL (CJOURNAL)</div>
+        <Alert type="info" icon="ℹ">Code : 2 chiffres numériques uniquement. Un seul journal peut être Actif à la fois.</Alert>
+        {msg && <Alert type={msg.t === "err" ? "err" : "ok"} icon={msg.t === "err" ? "✕" : "✓"}>{msg.m}</Alert>}
+        <DataGrid
+          cols={[
+            { k: "code",    l: "Code (2 chiff.)" },
+            { k: "libelle", l: "Libellé" },
+            { k: "statut",  l: "Statut", render: r => <StatutBadge statut={r.statut} /> },
+          ]}
+          rows={data} selId={sel?.id}
+          onSel={r => { if (mode === "view") { setSel(r); setForm({ ...r }); } }}
+        />
+        {mode !== "view" && (
+          <div className="group" style={{ marginTop: 10 }}>
+            <span className="group-title">{mode === "new" ? "➕ Nouveau journal" : "✏️ Modification"}</span>
+            <FormRow label="Code Journal (2 chiff.) :" lw={190}>
+              <W11Input value={form.code} onChange={v => upd("code", v.replace(/\D/g, "").slice(0, 2))} maxLen={2} style={{ width: 60 }} />
+              <span style={{ fontSize: 10, color: "#888" }}>2 chiffres uniquement</span>
+            </FormRow>
+            <FormRow label="Libellé :" lw={190}><W11Input value={form.libelle} onChange={v => upd("libelle", v)} style={{ width: 280 }} /></FormRow>
+            <FormRow label="Statut :" lw={190}>
+              <select className="w11-select" value={form.statut} onChange={e => upd("statut", e.target.value)} style={{ width: 160 }}>
+                <option value="Actif">Actif</option>
+                <option value="Inactif">Inactif</option>
+              </select>
+              {form.statut === "Actif" && <span style={{ fontSize: 10, color: "#107C10", marginLeft: 8 }}>Désactivera les autres journaux</span>}
+            </FormRow>
+          </div>
+        )}
+      </div>
+      <StatusBar items={[`${data.length} journaux`, `Actif : ${data.find(r => r.statut === "Actif")?.code || "aucun"}`]} />
+      {del && (
+        <div className="modal-bg"><div className="modal-box">
+          <div className="modal-title">🗑️ Confirmer la suppression</div>
+          <div className="modal-body"><Alert type="warn" icon="⚠">Action irréversible.</Alert></div>
+          <div className="modal-footer">
+            <button className="w11-btn" onClick={() => setDel(false)}>Annuler</button>
+            <button className="w11-btn danger" onClick={doDelete}>🗑️ Supprimer</button>
+          </div>
+        </div></div>
+      )}
+    </div>
   );
 }
 
-function CJNLScreen({ data, setData }) {
+/* CJNL — avec champ Projet, unicité code+projet */
+function CJNLScreen({ data, setData, projets, onAudit }) {
   return (
     <CrudScreen title="Journaux TomPro (CJNL)" icon="📔" extra="10 car. max"
       cols={[
+        { k: "projet",          l: "Projet" },
         { k: "code",            l: "Code (10 car.)" },
         { k: "libelle",         l: "Libellé" },
         { k: "comptePrincipal", l: "Compte Principal" },
       ]}
-      rows={data} setRows={setData} empty={{ code: "", libelle: "", comptePrincipal: "" }}
+      rows={data} setRows={setData}
+      empty={{ projet: "", code: "", libelle: "", comptePrincipal: "" }}
+      onAudit={onAudit}
       validate={(f, rows, eid) => {
+        if (!f.projet)                    return "Projet obligatoire.";
         if (!f.code.trim() || f.code.length > 10) return "Code : max 10 car.";
-        if (rows.some(r => r.code === f.code && r.id !== eid)) return "Ce code existe déjà.";
+        if (rows.some(r => r.code === f.code && r.projet === f.projet && r.id !== eid)) return "Code déjà existant pour ce projet.";
       }}
       fields={(f, set) => <>
-        <FormRow label="Code Journal TomPro :" lw={170}>
+        <FormRow label="Projet :" lw={180}>
+          <W11Select value={f.projet} onChange={v => set("projet", v)}
+            opts={projets.map(p => ({ v: p.code, l: `${p.code} — ${p.libelle}` }))} style={{ width: 220 }} />
+        </FormRow>
+        <FormRow label="Code Journal TomPro :" lw={180}>
           <W11Input value={f.code} onChange={v => set("code", v.toUpperCase().slice(0, 10))} maxLen={10} style={{ width: 150 }} />
-          <span style={{ fontSize: 10, color: "#888" }}>10 car. max</span>
+          <span style={{ fontSize: 10, color: "#888" }}>même code possible sur projets différents</span>
         </FormRow>
-        <FormRow label="Libellé :" lw={170}>
-          <W11Input value={f.libelle} onChange={v => set("libelle", v)} style={{ width: 280 }} />
-        </FormRow>
-        <FormRow label="Compte Principal :" lw={170}>
-          <W11Input value={f.comptePrincipal} onChange={v => set("comptePrincipal", v)} style={{ width: 150 }} />
-        </FormRow>
+        <FormRow label="Libellé :" lw={180}><W11Input value={f.libelle} onChange={v => set("libelle", v)} style={{ width: 280 }} /></FormRow>
+        <FormRow label="Compte Principal :" lw={180}><W11Input value={f.comptePrincipal} onChange={v => set("comptePrincipal", v)} style={{ width: 150 }} /></FormRow>
       </>}
     />
   );
 }
 
-function CGestionnScreen({ data, setData }) {
+/* CGESTIONN */
+function CGestionnScreen({ data, setData, onAudit }) {
   return (
     <CrudScreen title="Code Gestionnaire (CGESTIONN)" icon="🏷️" extra="4 chiffres"
       cols={[{ k: "code", l: "Code (4 chiff.)" }, { k: "libelle", l: "Libellé" }]}
-      rows={data} setRows={setData} empty={{ code: "", libelle: "" }}
+      rows={data} setRows={setData} empty={{ code: "", libelle: "" }} onAudit={onAudit}
       validate={(f, rows, eid) => {
         if (!/^\d{4}$/.test(f.code)) return "Exactement 4 chiffres numériques.";
-        if (rows.some(r => r.code === f.code && r.id !== eid)) return "Ce code existe déjà.";
+        if (rows.some(r => r.code === f.code && r.id !== eid)) return "Code existant.";
       }}
       fields={(f, set) => <>
-        <FormRow label="Code Gestionnaire :" lw={160}>
-          <W11Input value={f.code} onChange={v => set("code", v.replace(/\D/g, "").slice(0, 4))} maxLen={4} style={{ width: 80 }} />
-          <span style={{ fontSize: 10, color: "#888" }}>4 chiffres</span>
-        </FormRow>
-        <FormRow label="Libellé :" lw={160}>
-          <W11Input value={f.libelle} onChange={v => set("libelle", v)} style={{ width: 280 }} />
-        </FormRow>
+        <FormRow label="Code Gestionnaire :" lw={160}><W11Input value={f.code} onChange={v => set("code", v.replace(/\D/g,"").slice(0,4))} maxLen={4} style={{ width: 80 }} /></FormRow>
+        <FormRow label="Libellé :" lw={160}><W11Input value={f.libelle} onChange={v => set("libelle", v)} style={{ width: 280 }} /></FormRow>
       </>}
     />
   );
 }
 
-function CSRScreen({ data, setData }) {
+/* CSR — statut Actif/Inactif (un seul), validation format */
+function CSRScreen({ data, setData, onAudit }) {
   const [sel,  setSel]  = useState(null);
-  const [form, setForm] = useState({ code: "", libelle: "" });
+  const [form, setForm] = useState({ code: "", libelle: "", statut: "Inactif" });
   const [mode, setMode] = useState("view");
   const [msg,  setMsg]  = useState(null);
-  const ext = extractCSR(form.code);
-
+  const [del,  setDel]  = useState(false);
+  const ext = extractCSR(form.code.toUpperCase());
   const save = () => {
-    if (form.code.length !== 6) { setMsg({ t: "err", m: "Code UB : exactement 6 car." }); return; }
-    if (mode === "new" && data.some(r => r.code === form.code)) { setMsg({ t: "err", m: "Code existant." }); return; }
-    const row = { code: form.code, libelle: form.libelle, ...extractCSR(form.code) };
-    if (mode === "new") setData(p => [...p, { ...row, id: Date.now() }]);
-    else setData(p => p.map(r => r.id === sel.id ? { ...row, id: r.id } : r));
+    if (!validateCSRFormat(form.code)) { setMsg({ t: "err", m: "Format invalide : pos1=chiffre, pos2=lettre, pos3-6=4 chiffres. Ex: 1A0123" }); return; }
+    if (!form.libelle.trim())           { setMsg({ t: "err", m: "Libellé obligatoire." }); return; }
+    if (mode === "new" && data.some(r => r.code === form.code.toUpperCase())) { setMsg({ t: "err", m: "Code CSR existant." }); return; }
+    const row = { code: form.code.toUpperCase(), libelle: form.libelle, statut: form.statut, ...extractCSR(form.code.toUpperCase()) };
+    let newId = mode === "edit" ? sel.id : Date.now();
+    let nd = mode === "new"
+      ? [...data, { ...row, id: newId }]
+      : data.map(r => r.id === sel.id ? { ...row, id: r.id } : r);
+    if (row.statut === "Actif") nd = nd.map(r => r.id !== newId ? { ...r, statut: "Inactif" } : r);
+    setData(nd);
+    onAudit && onAudit(mode === "new" ? "Création" : "Modification", `CSR | ${row.code} statut:${row.statut}`);
     setMode("view"); setMsg({ t: "ok", m: "Unité budgétaire enregistrée." });
   };
-
+  const doDelete = () => {
+    onAudit && onAudit("Suppression", `CSR | ${sel.code}`);
+    setData(p => p.filter(r => r.id !== sel.id));
+    setSel(null); setMode("view"); setDel(false); setMsg({ t: "ok", m: "Supprimé." });
+  };
   return (
     <div style={{ display: "flex", flexDirection: "column", height: "100%" }}>
       <Toolbar btns={[
-        { icon: "➕", label: "Nouveau",    onClick: () => { setForm({ code: "", libelle: "" }); setSel(null); setMode("new"); setMsg(null); } },
-        { icon: "✏️", label: "Modifier",   onClick: () => { if (!sel) return; setForm({ code: sel.code, libelle: sel.libelle }); setMode("edit"); setMsg(null); }, disabled: !sel },
-        { icon: "🗑️", label: "Supprimer",  onClick: () => { if (sel) { setData(p => p.filter(r => r.id !== sel.id)); setSel(null); } }, disabled: !sel },
+        { icon: "➕", label: "Nouveau",     onClick: () => { setForm({ code: "", libelle: "", statut: "Inactif" }); setSel(null); setMode("new"); setMsg(null); } },
+        { icon: "✏️", label: "Modifier",    onClick: () => { if (!sel) return; setForm({ code: sel.code, libelle: sel.libelle, statut: sel.statut }); setMode("edit"); setMsg(null); }, disabled: !sel },
+        { icon: "🗑️", label: "Supprimer",   onClick: () => sel && setDel(true), disabled: !sel },
         "|",
-        { icon: "↩️", label: "Annuler",    onClick: () => { setMode("view"); setMsg(null); }, disabled: mode === "view" },
-        { icon: "💾", label: "Enregistrer",onClick: save, disabled: mode === "view" },
+        { icon: "↩️", label: "Annuler",     onClick: () => { setMode("view"); setMsg(null); }, disabled: mode === "view" },
+        { icon: "💾", label: "Enregistrer", onClick: save, disabled: mode === "view" },
       ]} />
       <div className="content">
-        <div className="section-bar">🏢 Code Unité Budgétaire (CSR) — 6 car. alphanumériques</div>
-        <Alert type="info" icon="ℹ">CFILIERE = 1er car. | CREGION = 2e car. | CEMET = 4 derniers car.</Alert>
+        <div className="section-bar">🏢 Code Unité Budgétaire (CSR)</div>
+        <Alert type="info" icon="ℹ">Format : CFILIERE (1 chiffre) + CREGION (1 lettre) + CEMET (4 chiffres). Ex: <b>1A0123</b>. Un seul CSR Actif à la fois.</Alert>
         {msg && <Alert type={msg.t === "err" ? "err" : "ok"} icon={msg.t === "err" ? "✕" : "✓"}>{msg.m}</Alert>}
         <DataGrid
           cols={[
-            { k: "code",     l: "Code UB (6 car.)" },
-            { k: "cfiliere", l: "CFILIERE" },
-            { k: "cregion",  l: "CREGION" },
-            { k: "cemet",    l: "CEMET (4 car.)" },
+            { k: "code",     l: "Code CSR" },
+            { k: "cfiliere", l: "CFILIERE (chiff.)" },
+            { k: "cregion",  l: "CREGION (lettre)" },
+            { k: "cemet",    l: "CEMET (4 chiff.)" },
             { k: "libelle",  l: "Libellé" },
+            { k: "statut",   l: "Statut", render: r => <StatutBadge statut={r.statut} /> },
           ]}
           rows={data} selId={sel?.id}
-          onSel={r => { if (mode === "view") { setSel(r); setForm({ code: r.code, libelle: r.libelle }); } }}
+          onSel={r => { if (mode === "view") { setSel(r); setForm({ code: r.code, libelle: r.libelle, statut: r.statut }); } }}
         />
         {mode !== "view" && (
           <div className="group" style={{ marginTop: 10 }}>
-            <span className="group-title">{mode === "new" ? "➕ Nouveau" : "✏️ Modification"}</span>
-            <div style={{ display: "flex", gap: 20, flexWrap: "wrap" }}>
+            <span className="group-title">{mode === "new" ? "➕ Nouveau CSR" : "✏️ Modification"}</span>
+            <div style={{ display: "flex", gap: 24, flexWrap: "wrap" }}>
               <div>
-                <FormRow label="Code UB (6 car.) :" lw={150}>
+                <FormRow label="Code CSR (6 car.) :" lw={165}>
                   <W11Input value={form.code} onChange={v => setForm(f => ({ ...f, code: v.toUpperCase().slice(0, 6) }))} maxLen={6} style={{ width: 100 }} />
+                  <span style={{ fontSize: 10, color: "#888" }}>ex: 1A0123</span>
                 </FormRow>
-                <FormRow label="Libellé :" lw={150}>
-                  <W11Input value={form.libelle} onChange={v => setForm(f => ({ ...f, libelle: v }))} style={{ width: 260 }} />
+                <FormRow label="Libellé :" lw={165}><W11Input value={form.libelle} onChange={v => setForm(f => ({ ...f, libelle: v }))} style={{ width: 240 }} /></FormRow>
+                <FormRow label="Statut :" lw={165}>
+                  <select className="w11-select" value={form.statut} onChange={e => setForm(f => ({ ...f, statut: e.target.value }))} style={{ width: 160 }}>
+                    <option value="Actif">Actif</option>
+                    <option value="Inactif">Inactif</option>
+                  </select>
+                  {form.statut === "Actif" && <span style={{ fontSize: 10, color: "#107C10", marginLeft: 8 }}>Désactivera les autres</span>}
                 </FormRow>
               </div>
               <div className="extraction-box">
                 <p style={{ fontSize: 11, fontWeight: 600, color: "#005FB8", marginBottom: 8 }}>⚡ Extraction automatique</p>
-                {[["CFILIERE", ext.cfiliere, "1er car."], ["CREGION", ext.cregion, "2e car."], ["CEMET", ext.cemet, "4 derniers"]].map(([k, v, h]) => (
+                {[["CFILIERE", ext.cfiliere, "1 chiffre (pos.1)"], ["CREGION", ext.cregion, "1 lettre (pos.2)"], ["CEMET", ext.cemet, "4 chiffres (pos.3-6)"]].map(([k, v, h]) => (
                   <div key={k} style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 5 }}>
                     <span style={{ fontSize: 11, fontWeight: 600, width: 64 }}>{k}</span>
                     <input readOnly value={v} className="w11-input" style={{ width: 74 }} />
                     <span style={{ fontSize: 10, color: "#888" }}>{h}</span>
                   </div>
                 ))}
+                {form.code.length === 6 && (
+                  <p style={{ fontSize: 10, marginTop: 6, color: validateCSRFormat(form.code) ? "#107C10" : "#C42B1C" }}>
+                    {validateCSRFormat(form.code) ? "✓ Format valide" : "✕ Format invalide"}
+                  </p>
+                )}
               </div>
             </div>
           </div>
         )}
       </div>
-      <StatusBar items={[`${data.length} unités`, sel ? `Sél. : ${sel.code}` : "", "6 car."]} />
+      <StatusBar items={[`${data.length} unités`, `Actif : ${data.find(r => r.statut === "Actif")?.code || "aucun"}`, "6 car."]} />
+      {del && (
+        <div className="modal-bg"><div className="modal-box">
+          <div className="modal-title">🗑️ Confirmer la suppression</div>
+          <div className="modal-body"><Alert type="warn" icon="⚠">Action irréversible.</Alert></div>
+          <div className="modal-footer">
+            <button className="w11-btn" onClick={() => setDel(false)}>Annuler</button>
+            <button className="w11-btn danger" onClick={doDelete}>🗑️ Supprimer</button>
+          </div>
+        </div></div>
+      )}
     </div>
   );
 }
 
-function UsersScreen({ data, setData }) {
+/* USERS */
+function UsersScreen({ data, setData, onAudit }) {
   return (
     <CrudScreen title="Gestion des Utilisateurs" icon="👤"
       cols={[
         { k: "login", l: "Login" },
         { k: "nom",   l: "Nom complet" },
-        { k: "role",  l: "Rôle", render: r => <Badge label={r.role} bg={r.role === "ADMIN" ? "#FBEBE9" : "#E6F1FB"} color={r.role === "ADMIN" ? "#710F0F" : "#003E7E"} /> },
+        { k: "role",  l: "Rôle", render: r => <Badge label={r.role} bg={r.role==="ADMIN"?"#FBEBE9":"#E6F1FB"} color={r.role==="ADMIN"?"#710F0F":"#003E7E"} /> },
         { k: "actif", l: "Actif", render: r => r.actif ? "✓ Oui" : "✕ Non" },
       ]}
       rows={data} setRows={setData}
       empty={{ login: "", nom: "", role: "OPERATEUR", actif: true, mdp: "", mdpConfirm: "" }}
+      onAudit={onAudit}
       validate={(f, rows, eid) => {
         if (!f.login.trim()) return "Login obligatoire.";
         if (!f.nom.trim())   return "Nom complet obligatoire.";
@@ -792,50 +891,43 @@ function UsersScreen({ data, setData }) {
             <span style={{ fontSize: 12 }}>Compte actif</span>
           </FormRow>
           <FormRow label="Mot de passe :" lw={120}><W11Input type="password" value={f.mdp || ""} onChange={v => set("mdp", v)} style={{ width: 180 }} /></FormRow>
-          <FormRow label="Confirmation :" lw={80}><W11Input type="password" value={f.mdpConfirm || ""} onChange={v => set("mdpConfirm", v)} style={{ width: 180 }} /></FormRow>
+          <FormRow label="Confirmation :"  lw={120}><W11Input type="password" value={f.mdpConfirm || ""} onChange={v => set("mdpConfirm", v)} style={{ width: 180 }} /></FormRow>
         </div>
       )}
     />
   );
 }
 
-/* ══════════════════════════════════════════════
-   CONFIGURATION BDD
-══════════════════════════════════════════════ */
+/* DBCONFIG */
 function DBConfigScreen({ onSave }) {
   const [form, setForm] = useState({ serveur: "SNEL-SRV\\SQLEXPRESS", auth: "SQL", user: "sa", password: "", dbName: "MoulinetteSNEL" });
   const [tested, setTested] = useState(null);
   const [testing, setTesting] = useState(false);
   const upd = (k, v) => setForm(f => ({ ...f, [k]: v }));
-
-  const test = () => {
-    setTesting(true); setTested(null);
-    setTimeout(() => { setTesting(false); setTested(form.serveur && form.dbName ? "ok" : "err"); }, 1200);
-  };
-
+  const test = () => { setTesting(true); setTested(null); setTimeout(() => { setTesting(false); setTested(form.serveur && form.dbName ? "ok" : "err"); }, 1200); };
   return (
     <div style={{ display: "flex", flexDirection: "column", height: "100%" }}>
       <div className="content">
         <div className="section-bar">⚙️ Paramétrage — Connexion SQL Server</div>
-        <Alert type="warn" icon="⚠">Configurez la connexion SQL Server avant la première utilisation de l'application.</Alert>
+        <Alert type="warn" icon="⚠">Configurez la connexion SQL Server avant la première utilisation.</Alert>
         <div className="group">
           <span className="group-title">Connexion SQL Server</span>
-          <FormRow label="Nom du serveur :"    lw={170}><W11Input value={form.serveur} onChange={v => upd("serveur", v)} style={{ width: 260 }} /></FormRow>
-          <FormRow label="Authentification :"  lw={170}>
+          <FormRow label="Nom du serveur :"   lw={170}><W11Input value={form.serveur} onChange={v => upd("serveur", v)} style={{ width: 260 }} /></FormRow>
+          <FormRow label="Authentification :" lw={170}>
             <select className="w11-select" value={form.auth} onChange={e => upd("auth", e.target.value)} style={{ width: 240 }}>
               <option value="SQL">Authentification SQL Server</option>
               <option value="WIN">Authentification Windows</option>
             </select>
           </FormRow>
           {form.auth === "SQL" && <>
-            <FormRow label="Nom d'utilisateur :" lw={170}><W11Input value={form.user} onChange={v => upd("user", v)} style={{ width: 180 }} /></FormRow>
-            <FormRow label="Mot de passe :"      lw={170}><W11Input type="password" value={form.password} onChange={v => upd("password", v)} style={{ width: 180 }} /></FormRow>
+            <FormRow label="Nom utilisateur :" lw={170}><W11Input value={form.user} onChange={v => upd("user", v)} style={{ width: 180 }} /></FormRow>
+            <FormRow label="Mot de passe :"    lw={170}><W11Input type="password" value={form.password} onChange={v => upd("password", v)} style={{ width: 180 }} /></FormRow>
           </>}
           <FormRow label="Base de données :" lw={170}><W11Input value={form.dbName} onChange={v => upd("dbName", v)} style={{ width: 220 }} /></FormRow>
           <div style={{ display: "flex", alignItems: "center", gap: 10, marginTop: 8 }}>
             <button className="w11-btn" onClick={test} disabled={testing}>{testing ? "⏳ Test..." : "🔄 Tester la connexion"}</button>
             {tested === "ok"  && <span style={{ fontSize: 12, color: "#107C10" }}>✓ Connexion réussie</span>}
-            {tested === "err" && <span style={{ fontSize: 12, color: "#C42B1C" }}>✕ Échec — vérifiez les paramètres</span>}
+            {tested === "err" && <span style={{ fontSize: 12, color: "#C42B1C" }}>✕ Échec</span>}
           </div>
         </div>
         <div style={{ display: "flex", justifyContent: "flex-end", gap: 8, marginTop: 4 }}>
@@ -847,11 +939,72 @@ function DBConfigScreen({ onSave }) {
   );
 }
 
-/* ══════════════════════════════════════════════
-   ÉCRAN TRAITEMENT
-══════════════════════════════════════════════ */
-function TraitementScreen({ data }) {
+/* TRACABILITE */
+function TracabiliteScreen({ data, setData }) {
+  const [filter, setFilter]         = useState("");
+  const [actionFilter, setActionFil] = useState("");
+  const filtered = data.filter(e =>
+    (!actionFilter || e.action === actionFilter) &&
+    [e.action, e.entite, e.user, e.details].some(v => (v || "").toLowerCase().includes(filter.toLowerCase()))
+  );
+  const aStyle = {
+    "Création":     { bg: "#E6F1FB", color: "#003E7E" },
+    "Modification": { bg: "#FFF4CE", color: "#7A4E00" },
+    "Suppression":  { bg: "#FBEBE9", color: "#710F0F" },
+    "Traitement":   { bg: "#E6F4E6", color: "#0C4B0C" },
+    "Connexion":    { bg: "#F5F5F5", color: "#5D5D5D" },
+    "Déconnexion":  { bg: "#F5F5F5", color: "#5D5D5D" },
+  };
+  const exportCSV = () => {
+    if (!filtered.length) return;
+    const keys = ["ts", "user", "action", "entite", "details"];
+    const csv = [keys.join(";"), ...[...filtered].reverse().map(r => keys.map(k => `"${(r[k]||"").replace(/"/g,'""')}"`).join(";"))].join("\n");
+    const blob = new Blob(["\uFEFF" + csv], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url; a.download = `audit_${new Date().toISOString().slice(0,10)}.csv`; a.click();
+  };
+  return (
+    <div style={{ display: "flex", flexDirection: "column", height: "100%" }}>
+      <Toolbar btns={[
+        { icon: "📄", label: "Exporter CSV",      onClick: exportCSV,          disabled: !filtered.length },
+        "|",
+        { icon: "🗑️", label: "Effacer le journal", onClick: () => { if (window.confirm("Effacer tout le journal d'audit ?")) setData([]); } },
+      ]} />
+      <div className="content">
+        <div className="section-bar">📋 Journal d'Audit — Traçabilité des Actions Utilisateurs</div>
+        <div style={{ display: "flex", gap: 6, marginBottom: 8, flexWrap: "wrap" }}>
+          <W11Input value={filter} onChange={setFilter} placeholder="🔍 Rechercher..." style={{ width: 260 }} />
+          <select className="w11-select" value={actionFilter} onChange={e => setActionFil(e.target.value)} style={{ width: 170 }}>
+            <option value="">— Toutes les actions —</option>
+            {["Création", "Modification", "Suppression", "Traitement", "Connexion", "Déconnexion"].map(a => <option key={a}>{a}</option>)}
+          </select>
+          <button className="w11-btn" onClick={() => { setFilter(""); setActionFil(""); }}>✕</button>
+        </div>
+        {filtered.length === 0
+          ? <Alert type="info" icon="ℹ">Aucun événement{filter || actionFilter ? " correspondant aux filtres" : " enregistré"}.</Alert>
+          : <DataGrid
+              cols={[
+                { k: "ts",      l: "Date / Heure" },
+                { k: "user",    l: "Utilisateur" },
+                { k: "action",  l: "Action",  render: r => { const s = aStyle[r.action] || { bg: "#eee", color: "#333" }; return <Badge label={r.action} bg={s.bg} color={s.color} />; } },
+                { k: "entite",  l: "Entité" },
+                { k: "details", l: "Détails" },
+              ]}
+              rows={[...filtered].reverse()}
+            />
+        }
+      </div>
+      <StatusBar items={[`${data.length} événement(s)`, filtered.length !== data.length ? `${filtered.length} affichés` : "", actionFilter ? `Filtre: ${actionFilter}` : ""]} />
+    </div>
+  );
+}
+
+/* TRAITEMENT — CJOURNAL et CSR filtrés sur Actif */
+function TraitementScreen({ data, onAudit }) {
   const { projets, exercices, ccompteg, setCcompteg, cjournal, cjnl, cgestionn, csr } = data;
+  const cjournalActif = cjournal.filter(r => r.statut === "Actif");
+  const csrActif      = csr.filter(r => r.statut === "Actif");
 
   const [form,       setForm]       = useState({ projet: "", journal: "", exercice: "", gestionnaire: "", ub: "", taux: "2850" });
   const [fileName,   setFileName]   = useState("Export_Mars2026.csv");
@@ -868,11 +1021,11 @@ function TraitementScreen({ data }) {
   const corrRef  = useRef(ccompteg);
   useEffect(() => { corrRef.current = ccompteg; }, [ccompteg]);
 
-  const set  = (k, v) => setForm(f => ({ ...f, [k]: v }));
+  const set    = (k, v) => setForm(f => ({ ...f, [k]: v }));
   const addLog = (m, t = "info") => setLogs(p => [...p, { m, t, ts: new Date().toLocaleTimeString() }]);
 
-  const ubInfo   = csr.find(r => r.code === form.ub);
-  const jnlInfo  = cjournal.find(r => r.code === form.journal);
+  const ubInfo   = csrActif.find(r => r.code === form.ub);
+  const jnlInfo  = cjournalActif.find(r => r.code === form.journal);
   const projInfo = projets.find(r => r.code === form.projet);
   const exInfo   = exercices.find(r => r.code === form.exercice);
   const formOK   = form.projet && form.journal && form.exercice && form.gestionnaire && form.ub && form.taux && fileName;
@@ -883,7 +1036,7 @@ function TraitementScreen({ data }) {
       op++;
       const cD = corr.find(c => c.compteTompro === row.compteDebT)?.compteSnell || "???";
       const cC = corr.find(c => c.compteTompro === row.compteCrT)?.compteSnell  || "???";
-      const jp = (jnlInfo?.code || "AC").substring(0, 2);
+      const jp = (jnlInfo?.code || "01").substring(0, 2);
       const an = exInfo?.code || "2025"; const mo = 3;
       const fk = jp + an + mo; fm[fk] = (fm[fk] || 0) + 1;
       const fo = buildAFOLI(jp, an, mo, fm[fk]);
@@ -902,8 +1055,8 @@ function TraitementScreen({ data }) {
         DPERIODE: `${an}0${mo}`, DINSCRIPT: row.date,
         ENT_FIN: ubInfo?.code || "", NUMCHEQ: "", NPERIODE: "", CPTEARECL: "", CPTEAREFL: "",
       };
-      res.push({ ...base, CLIGNE: "01", XLIGNE: "0", CCOMPTEG: cD, ADEBMVTZ: (row.montantDev * tx).toFixed(2), ACREMVTZ: "0.00", ADEBMVT: row.montantDev.toFixed(2), ACREMVT: "0.00" });
-      res.push({ ...base, CLIGNE: "02", XLIGNE: "0", CCOMPTEG: cC, ADEBMVTZ: "0.00", ACREMVTZ: (row.montantDev * tx).toFixed(2), ADEBMVT: "0.00", ACREMVT: row.montantDev.toFixed(2) });
+      res.push({ ...base, CLIGNE: "01", XLIGNE: "0", CCOMPTEG: cD, ADEBMVTZ: (row.montantDev*tx).toFixed(2), ACREMVTZ: "0.00", ADEBMVT: row.montantDev.toFixed(2), ACREMVT: "0.00" });
+      res.push({ ...base, CLIGNE: "02", XLIGNE: "0", CCOMPTEG: cC, ADEBMVTZ: "0.00", ACREMVTZ: (row.montantDev*tx).toFixed(2), ADEBMVT: "0.00", ACREMVT: row.montantDev.toFixed(2) });
     });
     return res;
   }, [form, ubInfo, jnlInfo, projInfo, exInfo, cjnl]);
@@ -912,7 +1065,9 @@ function TraitementScreen({ data }) {
     if (pendRef.current.length === 0) {
       const res = buildLines(TOMPRO_RAW, corrRef.current);
       setResults(res); setProgress(100); setProcessing(false); setDone(true);
-      addLog(`Traitement terminé : ${res.length} lignes générées.`, "ok"); return;
+      addLog(`Traitement terminé : ${res.length} lignes générées.`, "ok");
+      onAudit && onAudit("Traitement", `Projet:${form.projet} | Journal:${form.journal} | Exercice:${form.exercice} | CSR:${form.ub} | ${res.length} lignes`);
+      return;
     }
     const row  = pendRef.current[0];
     const step = TOMPRO_RAW.length - pendRef.current.length + 1;
@@ -925,9 +1080,9 @@ function TraitementScreen({ data }) {
     }
     pendRef.current.shift();
     setProgress(Math.round((step / TOMPRO_RAW.length) * 100));
-    addLog(`Opération n°${row.numPiece} — ${row.libelle}`);
+    addLog(`Op. n°${row.numPiece} — ${row.libelle}`);
     timerRef.current = setTimeout(runNext, 320);
-  }, [buildLines]);
+  }, [buildLines, form, onAudit]);
 
   const startProcessing = () => {
     if (!formOK) return;
@@ -936,23 +1091,22 @@ function TraitementScreen({ data }) {
     addLog("Lecture du fichier source TomPro...");
     timerRef.current = setTimeout(runNext, 500);
   };
-
   const saveMissing = () => {
     if (!newCorr.compteSnell) return;
-    const e = { ...newCorr, id: Date.now() };
+    const e = { ...newCorr, id: Date.now(), projet: form.projet };
     setCcompteg(p => [...p, e]); corrRef.current = [...corrRef.current, e];
+    onAudit && onAudit("Création", `CCOMPTEG (via traitement) | ${newCorr.compteTompro}→${newCorr.compteSnell}`);
     setMissing(null); pendRef.current.shift(); setProcessing(true);
-    addLog(`Correspondance créée : ${newCorr.compteTompro} → ${newCorr.compteSnell}. Reprise...`, "ok");
+    addLog(`Correspondance créée : ${newCorr.compteTompro}→${newCorr.compteSnell}. Reprise...`, "ok");
     timerRef.current = setTimeout(runNext, 400);
   };
-
   const exportCSV = () => {
     if (!results.length) return;
     const keys = Object.keys(results[0]);
-    const csv  = [keys.join(";"), ...results.map(r => keys.map(k => r[k]).join(";"))].join("\n");
+    const csv = [keys.join(";"), ...results.map(r => keys.map(k => r[k]).join(";"))].join("\n");
     const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
-    const url  = URL.createObjectURL(blob);
-    const a    = document.createElement("a");
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
     a.href = url; a.download = genFileName(exInfo?.code || "2025", 3) + ".csv"; a.click();
     addLog(`Export CSV : ${genFileName(exInfo?.code || "2025", 3)}.csv`, "ok");
   };
@@ -967,14 +1121,15 @@ function TraitementScreen({ data }) {
       <Toolbar btns={[
         { icon: "⚡", label: "Lancer le Traitement", onClick: startProcessing, disabled: !formOK || processing },
         "|",
-        { icon: "📄", label: "Exporter CSV", onClick: exportCSV, disabled: !done },
+        { icon: "📄", label: "Exporter CSV",  onClick: exportCSV,  disabled: !done },
         "|",
         { icon: "🔄", label: "Réinitialiser", onClick: () => { setResults([]); setLogs([]); setProgress(0); setDone(false); clearTimeout(timerRef.current); setProcessing(false); } },
       ]} />
       <div className="content">
-        {/* ENTÊTE */}
         <div className="group" style={{ marginBottom: 10 }}>
           <span className="group-title">📋 Entête — Paramètres de Traitement</span>
+          {cjournalActif.length === 0 && <Alert type="warn" icon="⚠">Aucun Journal SNEL actif — activez-en un dans Structure → Journaux SNEL.</Alert>}
+          {csrActif.length === 0      && <Alert type="warn" icon="⚠">Aucune Unité Budgétaire active — activez-en une dans Structure → Unité Budgétaire.</Alert>}
           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: "6px 16px", marginBottom: 8 }}>
             <FormRow label="Projet :" lw={110}>
               <W11Select value={form.projet} onChange={v => set("projet", v)}
@@ -982,7 +1137,7 @@ function TraitementScreen({ data }) {
             </FormRow>
             <FormRow label="Journal SNEL :" lw={110}>
               <W11Select value={form.journal} onChange={v => set("journal", v)}
-                opts={cjournal.map(j => ({ v: j.code, l: `${j.code} — ${j.libelle}` }))} style={{ width: 180 }} />
+                opts={cjournalActif.map(j => ({ v: j.code, l: `${j.code} — ${j.libelle}` }))} style={{ width: 180 }} />
             </FormRow>
             <FormRow label="Exercice :" lw={85}>
               <W11Select value={form.exercice} onChange={v => set("exercice", v)}
@@ -994,7 +1149,7 @@ function TraitementScreen({ data }) {
             </FormRow>
             <FormRow label="Unité Budgétaire :" lw={110}>
               <W11Select value={form.ub} onChange={v => set("ub", v)}
-                opts={csr.map(s => ({ v: s.code, l: `${s.code} — ${s.libelle}` }))} style={{ width: 180 }} />
+                opts={csrActif.map(s => ({ v: s.code, l: `${s.code} — ${s.libelle}` }))} style={{ width: 180 }} />
             </FormRow>
             <FormRow label="Taux CDF/USD :" lw={85}>
               <W11Input value={form.taux} onChange={v => set("taux", v.replace(/\D/g, ""))} style={{ width: 100 }} />
@@ -1014,11 +1169,10 @@ function TraitementScreen({ data }) {
                 {processing ? "⏳ En cours..." : "⚡ Lancer"}
               </button>
             </div>
-            {!formOK && <p style={{ fontSize: 10, color: "#C42B1C", marginTop: 3 }}>Tous les champs de l'entête sont obligatoires avant de lancer le traitement.</p>}
+            {!formOK && <p style={{ fontSize: 10, color: "#C42B1C", marginTop: 3 }}>Tous les champs sont obligatoires avant de lancer le traitement.</p>}
           </div>
         </div>
 
-        {/* BARRE DE PROGRESSION */}
         {(processing || done || progress > 0) && (
           <div style={{ marginBottom: 10 }}>
             <div style={{ display: "flex", justifyContent: "space-between", fontSize: 11, marginBottom: 3 }}>
@@ -1029,7 +1183,6 @@ function TraitementScreen({ data }) {
           </div>
         )}
 
-        {/* CONSOLE */}
         {logs.length > 0 && (
           <div className="log-console">
             {logs.map((l, i) => (
@@ -1040,7 +1193,6 @@ function TraitementScreen({ data }) {
           </div>
         )}
 
-        {/* RÉSULTATS */}
         {done && results.length > 0 && (
           <div className="group">
             <span className="group-title">📊 Résultat — Visualisation avant Export</span>
@@ -1049,11 +1201,9 @@ function TraitementScreen({ data }) {
                 ["Débit total", `${tDeb.toLocaleString("fr-FR", { minimumFractionDigits: 2 })} USD`],
                 ["Crédit total", `${tCr.toLocaleString("fr-FR",  { minimumFractionDigits: 2 })} USD`],
                 ["Équilibre", equil ? "✓ OK" : "✕ NON"],
-                ["Fichier export", genFileName(exInfo?.code || "2025", 3)],
+                ["Fichier", genFileName(exInfo?.code || "2025", 3)],
               ].map(([l, v]) => (
-                <div key={l} className="stat-card">
-                  <strong>{String(v)}</strong><span>{l}</span>
-                </div>
+                <div key={l} className="stat-card"><strong>{String(v)}</strong><span>{l}</span></div>
               ))}
             </div>
             <div className="grid-wrap" style={{ maxHeight: 200 }}>
@@ -1061,45 +1211,37 @@ function TraitementScreen({ data }) {
                 <thead><tr>{COLS.map(c => <th key={c} style={{ fontSize: 8, padding: "3px 6px" }}>{c}</th>)}</tr></thead>
                 <tbody>
                   {results.map((r, i) => (
-                    <tr key={i}>
-                      {COLS.map(c => <td key={c} style={{ maxWidth: 90, fontSize: 9 }}>{r[c]}</td>)}
-                    </tr>
+                    <tr key={i}>{COLS.map(c => <td key={c} style={{ maxWidth: 90, fontSize: 9 }}>{r[c]}</td>)}</tr>
                   ))}
                 </tbody>
               </table>
             </div>
             <div style={{ display: "flex", justifyContent: "flex-end", gap: 8, marginTop: 8, alignItems: "center" }}>
-              <span style={{ fontSize: 10, color: "#888" }}>Fichier : <b>{genFileName(exInfo?.code || "2025", 3)}</b> (CDP + AAA + MM)</span>
+              <span style={{ fontSize: 10, color: "#888" }}>Fichier : <b>{genFileName(exInfo?.code || "2025", 3)}</b></span>
               <button className="w11-btn success" onClick={exportCSV}>📄 Exporter CSV</button>
             </div>
           </div>
         )}
       </div>
-
       <StatusBar items={[
         processing ? `⏳ ${progress}%` : done ? `✓ ${results.length} lignes` : "En attente",
-        form.projet || "Projet ?",
-        form.journal || "Journal ?",
-        form.exercice || "—",
+        form.projet || "Projet ?", form.journal ? `JNL: ${form.journal}` : "Journal ?",
+        form.ub ? `CSR: ${form.ub}` : "CSR ?",
         form.taux ? `${parseInt(form.taux).toLocaleString("fr-FR")} CDF/USD` : "",
       ]} />
-
-      {/* MODAL COMPTE MANQUANT */}
       {missing && (
         <div className="modal-bg">
           <div className="modal-box">
             <div className="modal-title">🔗 Compte absent — {missing.compte}</div>
             <div className="modal-body">
-              <Alert type="warn" icon="⚠">
-                Le compte TomPro <b>{missing.compte}</b> n'a pas de correspondance SNEL. Créez-la pour continuer le traitement.
-              </Alert>
-              <FormRow label="Compte TomPro :"      lw={170}><W11Input value={newCorr.compteTompro}  readOnly style={{ width: 160 }} /></FormRow>
-              <FormRow label="Libellé TomPro :"     lw={170}><W11Input value={newCorr.libelleTompro} onChange={v => setNewCorr(f => ({ ...f, libelleTompro: v }))} style={{ width: 210 }} /></FormRow>
-              <FormRow label="Compte SNEL (11 car.) :" lw={170}><W11Input value={newCorr.compteSnell} onChange={v => setNewCorr(f => ({ ...f, compteSnell: v.slice(0, 11) }))} style={{ width: 160 }} /></FormRow>
-              <FormRow label="Libellé SNEL :"       lw={170}><W11Input value={newCorr.libelleSnell}  onChange={v => setNewCorr(f => ({ ...f, libelleSnell: v }))}  style={{ width: 210 }} /></FormRow>
+              <Alert type="warn" icon="⚠">Le compte TomPro <b>{missing.compte}</b> n'a pas de correspondance SNEL. Créez-la pour continuer.</Alert>
+              <FormRow label="Compte TomPro :"       lw={170}><W11Input value={newCorr.compteTompro}  readOnly style={{ width: 160 }} /></FormRow>
+              <FormRow label="Libellé TomPro :"      lw={170}><W11Input value={newCorr.libelleTompro} onChange={v => setNewCorr(f => ({ ...f, libelleTompro: v }))} style={{ width: 210 }} /></FormRow>
+              <FormRow label="Compte SNEL (11 car.):" lw={170}><W11Input value={newCorr.compteSnell}  onChange={v => setNewCorr(f => ({ ...f, compteSnell: v.slice(0, 11) }))} style={{ width: 160 }} /></FormRow>
+              <FormRow label="Libellé SNEL :"        lw={170}><W11Input value={newCorr.libelleSnell}  onChange={v => setNewCorr(f => ({ ...f, libelleSnell: v }))} style={{ width: 210 }} /></FormRow>
             </div>
             <div className="modal-footer">
-              <button className="w11-btn" onClick={() => { setMissing(null); setProcessing(false); }}>⏹ Annuler traitement</button>
+              <button className="w11-btn" onClick={() => { setMissing(null); setProcessing(false); }}>⏹ Annuler</button>
               <button className="w11-btn primary" onClick={saveMissing} disabled={!newCorr.compteSnell}>💾 Créer et Continuer ⚡</button>
             </div>
           </div>
@@ -1109,64 +1251,66 @@ function TraitementScreen({ data }) {
   );
 }
 
-/* ══════════════════════════════════════════════
-   DÉFINITIONS DES FENÊTRES MDI
-══════════════════════════════════════════════ */
+/* WIN DEFS */
 const WIN_DEFS = {
-  traitement: { title: "Traitement — Moulinette TomPro → SNEL", icon: "⚡", w: 860, h: 580 },
-  projets:    { title: "Structure — Liste des Projets",          icon: "📁", w: 560, h: 420 },
-  exercice:   { title: "Structure — Exercice Comptable",         icon: "📅", w: 640, h: 460 },
-  ccompteg:   { title: "Structure — Correspondances Comptes",    icon: "🔗", w: 720, h: 500 },
-  cjournal:   { title: "Structure — Journaux SNEL",              icon: "📓", w: 500, h: 400 },
-  cjnl:       { title: "Structure — Journaux TomPro",            icon: "📔", w: 580, h: 430 },
-  cgestionn:  { title: "Structure — Code Gestionnaire",          icon: "🏷️", w: 500, h: 380 },
-  csr:        { title: "Structure — Unité Budgétaire (CSR)",     icon: "🏢", w: 680, h: 500 },
-  users:      { title: "Administration — Utilisateurs",          icon: "👤", w: 660, h: 490 },
-  dbconfig:   { title: "Configuration Base de Données",          icon: "⚙️", w: 520, h: 420 },
+  traitement:  { title: "Traitement — Moulinette TomPro → SNEL", icon: "⚡",  w: 880, h: 600 },
+  projets:     { title: "Structure — Liste des Projets",          icon: "📁",  w: 560, h: 420 },
+  exercice:    { title: "Structure — Exercice Comptable",         icon: "📅",  w: 720, h: 490 },
+  ccompteg:    { title: "Structure — Correspondances Comptes",    icon: "🔗",  w: 800, h: 530 },
+  cjournal:    { title: "Structure — Journaux SNEL",              icon: "📓",  w: 520, h: 440 },
+  cjnl:        { title: "Structure — Journaux TomPro",            icon: "📔",  w: 660, h: 470 },
+  cgestionn:   { title: "Structure — Code Gestionnaire",          icon: "🏷️",  w: 500, h: 380 },
+  csr:         { title: "Structure — Unité Budgétaire (CSR)",     icon: "🏢",  w: 740, h: 540 },
+  users:       { title: "Administration — Utilisateurs",          icon: "👤",  w: 660, h: 490 },
+  dbconfig:    { title: "Configuration Base de Données",          icon: "⚙️",  w: 520, h: 420 },
+  tracabilite: { title: "Administration — Journal d'Audit",       icon: "📋",  w: 840, h: 530 },
 };
 
-/* ══════════════════════════════════════════════
-   APPLICATION PRINCIPALE
-══════════════════════════════════════════════ */
+/* APP PRINCIPALE */
 function App() {
-  /* AUTH */
   const [loggedIn,     setLoggedIn]     = useState(false);
   const [dbConfigured, setDbConfigured] = useState(false);
   const [currentUser,  setCurrentUser]  = useState(null);
   const [loginForm,    setLoginForm]    = useState({ login: "administrateur", password: "" });
   const [loginErr,     setLoginErr]     = useState("");
+  const [windows,      setWindows]      = useState([]);
+  const [focusedId,    setFocusedId]    = useState(null);
+  const [openMenu,     setOpenMenu]     = useState(null);
+  const [users,        setUsers]        = useState(INIT.users);
+  const [projets,      setProjets]      = useState(INIT.projets);
+  const [exercices,    setExercices]    = useState(INIT.exercices);
+  const [ccompteg,     setCcompteg]     = useState(INIT.ccompteg);
+  const [cjournal,     setCjournal]     = useState(INIT.cjournal);
+  const [cjnl,         setCjnl]         = useState(INIT.cjnl);
+  const [cgestionn,    setCgestionn]    = useState(INIT.cgestionn);
+  const [csr,          setCsr]          = useState(INIT.csr);
+  const [audit,        setAudit]        = useState(INIT.audit);
+  const [clock,        setClock]        = useState(new Date().toLocaleTimeString("fr-FR"));
 
-  /* MDI */
-  const [windows,   setWindows]   = useState([]);
-  const [focusedId, setFocusedId] = useState(null);
-  const [openMenu,  setOpenMenu]  = useState(null);
-
-  /* DONNÉES */
-  const [users,    setUsers]    = useState(INIT.users);
-  const [projets,  setProjets]  = useState(INIT.projets);
-  const [exercices,setExercices]= useState(INIT.exercices);
-  const [ccompteg, setCcompteg] = useState(INIT.ccompteg);
-  const [cjournal, setCjournal] = useState(INIT.cjournal);
-  const [cjnl,     setCjnl]     = useState(INIT.cjnl);
-  const [cgestionn,setCgestionn]= useState(INIT.cgestionn);
-  const [csr,      setCsr]      = useState(INIT.csr);
-
-
-  /* Horloge */
-  const [clock, setClock] = useState(new Date().toLocaleTimeString("fr-FR"));
   useEffect(() => {
     const t = setInterval(() => setClock(new Date().toLocaleTimeString("fr-FR")), 1000);
     return () => clearInterval(t);
   }, []);
 
-  /* LOGIN */
+  const currentUserRef = useRef(currentUser);
+  useEffect(() => { currentUserRef.current = currentUser; }, [currentUser]);
+
+  const addAudit = useCallback((action, details) => {
+    setAudit(p => [...p, {
+      id: Date.now(), ts: nowStr(),
+      user: currentUserRef.current?.login || "—",
+      action, entite: action, details,
+    }]);
+  }, []);
+
   const doLogin = () => {
     const u = users.find(u => u.login === loginForm.login && u.mdp === loginForm.password && u.actif);
-    if (u) { setCurrentUser(u); setLoggedIn(true); setLoginErr(""); }
-    else setLoginErr("Login ou mot de passe incorrect.");
+    if (u) {
+      setCurrentUser(u); setLoggedIn(true); setLoginErr("");
+      setAudit(p => [...p, { id: Date.now(), ts: nowStr(), user: u.login, action: "Connexion", entite: "Auth", details: `Connexion — rôle: ${u.role}` }]);
+    } else setLoginErr("Login ou mot de passe incorrect.");
   };
 
-  /* MDI ops */
   const openWindow = useCallback((key) => {
     setWindows(prev => {
       if (prev.find(w => w.key === key)) { setFocusedId(key); return prev; }
@@ -1174,8 +1318,7 @@ function App() {
       const off = prev.length * 28;
       return [...prev, { key, x: 36 + off, y: 28 + off, w: def.w, h: def.h }];
     });
-    setFocusedId(key);
-    setOpenMenu(null);
+    setFocusedId(key); setOpenMenu(null);
   }, []);
 
   const closeWindow = useCallback((key) => {
@@ -1183,25 +1326,24 @@ function App() {
     setFocusedId(prev => prev === key ? null : prev);
   }, []);
 
-  /* Contenu de chaque fenêtre */
   const renderContent = (key) => {
     const trData = { projets, exercices, ccompteg, setCcompteg, cjournal, cjnl, cgestionn, csr };
     switch (key) {
-      case "traitement": return <TraitementScreen data={trData} />;
-      case "projets":    return <ProjetsScreen   data={projets}   setData={setProjets} />;
-      case "exercice":   return <ExerciceScreen  data={exercices} setData={setExercices} />;
-      case "ccompteg":   return <CComptegScreen  data={ccompteg}  setData={setCcompteg} />;
-      case "cjournal":   return <CJournalScreen  data={cjournal}  setData={setCjournal} />;
-      case "cjnl":       return <CJNLScreen      data={cjnl}      setData={setCjnl} />;
-      case "cgestionn":  return <CGestionnScreen data={cgestionn} setData={setCgestionn} />;
-      case "csr":        return <CSRScreen       data={csr}       setData={setCsr} />;
-      case "users":      return <UsersScreen     data={users}     setData={setUsers} />;
-      case "dbconfig":   return <DBConfigScreen  onSave={() => { setDbConfigured(true); closeWindow("dbconfig"); }} />;
+      case "traitement":  return <TraitementScreen data={trData} onAudit={addAudit} />;
+      case "projets":     return <ProjetsScreen    data={projets}   setData={setProjets}   onAudit={addAudit} />;
+      case "exercice":    return <ExerciceScreen   data={exercices} setData={setExercices} projets={projets} onAudit={addAudit} />;
+      case "ccompteg":    return <CComptegScreen   data={ccompteg}  setData={setCcompteg}  projets={projets} onAudit={addAudit} />;
+      case "cjournal":    return <CJournalScreen   data={cjournal}  setData={setCjournal}  onAudit={addAudit} />;
+      case "cjnl":        return <CJNLScreen       data={cjnl}      setData={setCjnl}      projets={projets} onAudit={addAudit} />;
+      case "cgestionn":   return <CGestionnScreen  data={cgestionn} setData={setCgestionn} onAudit={addAudit} />;
+      case "csr":         return <CSRScreen        data={csr}       setData={setCsr}       onAudit={addAudit} />;
+      case "users":       return <UsersScreen      data={users}     setData={setUsers}     onAudit={addAudit} />;
+      case "dbconfig":    return <DBConfigScreen   onSave={() => { setDbConfigured(true); closeWindow("dbconfig"); }} />;
+      case "tracabilite": return <TracabiliteScreen data={audit} setData={setAudit} />;
       default: return null;
     }
   };
 
-  /* ── ÉCRAN LOGIN ── */
   if (!loggedIn) return (
     <div className="login-shell">
       <div className="login-card">
@@ -1210,22 +1352,19 @@ function App() {
             <span style={{ fontSize: 15 }}>🔄</span> Moulinette TomPro → SNEL
           </span>
           <div style={{ display: "flex" }}>
-            {["—", "□", "✕"].map(c => (
-              <button key={c} style={{ width: 40, height: 28, border: "none", background: "transparent", cursor: "pointer", fontSize: 10, display: "flex", alignItems: "center", justifyContent: "center" }}>{c}</button>
-            ))}
+            {["—","□","✕"].map(c => <button key={c} style={{ width: 40, height: 28, border: "none", background: "transparent", cursor: "pointer", fontSize: 10 }}>{c}</button>)}
           </div>
         </div>
         <div className="login-body">
           <div style={{ textAlign: "center", marginBottom: 22 }}>
             <div style={{ fontSize: 44, lineHeight: 1 }}>🔄</div>
             <p style={{ fontSize: 16, fontWeight: 600, color: "#1C1C1C", marginTop: 10 }}>Moulinette TomPro → SNEL</p>
-            <p style={{ fontSize: 12, color: "#5D5D5D", marginTop: 3 }}>Société SNEL — v1.0.0</p>
+            <p style={{ fontSize: 12, color: "#5D5D5D", marginTop: 3 }}>Société SNEL — v2.0.0</p>
           </div>
           {loginErr && <Alert type="err" icon="✕">{loginErr}</Alert>}
           <div style={{ marginBottom: 12 }}>
             <label className="w11-label">Nom d'utilisateur</label>
-            <input className="w11-input full-input" value={loginForm.login}
-              onChange={e => setLoginForm(f => ({ ...f, login: e.target.value }))} />
+            <input className="w11-input full-input" value={loginForm.login} onChange={e => setLoginForm(f => ({ ...f, login: e.target.value }))} />
           </div>
           <div style={{ marginBottom: 8 }}>
             <label className="w11-label">Mot de passe</label>
@@ -1233,9 +1372,7 @@ function App() {
               onChange={e => setLoginForm(f => ({ ...f, password: e.target.value }))}
               onKeyDown={e => e.key === "Enter" && doLogin()} />
           </div>
-          <p style={{ fontSize: 10, color: "#888", marginBottom: 16 }}>
-            Démo : <b>administrateur</b> / <b>admin123</b>
-          </p>
+          <p style={{ fontSize: 10, color: "#888", marginBottom: 16 }}>Démo : <b>administrateur</b> / <b>admin123</b></p>
           <div style={{ display: "flex", justifyContent: "flex-end", gap: 8 }}>
             <button className="w11-btn">Annuler</button>
             <button className="w11-btn primary" onClick={doLogin}>🔓 Se connecter</button>
@@ -1246,11 +1383,10 @@ function App() {
     </div>
   );
 
-  /* ── ÉCRAN CONFIG BDD ── */
   if (!dbConfigured) return (
     <div style={{ display: "flex", alignItems: "center", justifyContent: "center", height: "100vh", background: "#F3F3F3" }}>
-      <div style={{ width: 540, background: "#FFFFFF", borderRadius: 12, boxShadow: "0 8px 32px rgba(0,0,0,0.12), inset 0 0 0 1px rgba(0,0,0,0.09)", overflow: "hidden" }}>
-        <div style={{ background: "#FAFAFA", borderBottom: "1px solid rgba(0,0,0,0.08)", padding: "10px 14px", borderRadius: "12px 12px 0 0", display: "flex", alignItems: "center", gap: 8 }}>
+      <div style={{ width: 540, background: "#FFFFFF", borderRadius: 12, boxShadow: "0 8px 32px rgba(0,0,0,0.12)", overflow: "hidden" }}>
+        <div style={{ background: "#FAFAFA", borderBottom: "1px solid rgba(0,0,0,0.08)", padding: "10px 14px", display: "flex", alignItems: "center", gap: 8 }}>
           <span style={{ fontSize: 14 }}>⚙️</span>
           <span style={{ fontSize: 12, fontWeight: 600 }}>Configuration Base de Données — Première connexion</span>
         </div>
@@ -1259,65 +1395,57 @@ function App() {
     </div>
   );
 
-  /* ── APPLICATION PRINCIPALE MDI ── */
   const MENUS = {
     Fichier: [
-      { l: "🔓 Déconnexion", a: () => { setLoggedIn(false); setCurrentUser(null); setDbConfigured(false); setWindows([]); } },
+      { l: "🔓 Déconnexion", a: () => { addAudit("Déconnexion", `Déconnexion de ${currentUser?.login}`); setLoggedIn(false); setCurrentUser(null); setDbConfigured(false); setWindows([]); } },
     ],
     Structure: [
-      { l: "📁 Projets",                      a: () => openWindow("projets") },
-      { l: "📅 Exercice Comptable",            a: () => openWindow("exercice") },
+      { l: "📁 Projets",                           a: () => openWindow("projets") },
+      { l: "📅 Exercice Comptable",                a: () => openWindow("exercice") },
       { l: "🔗 Correspondances Comptes (CCOMPTEG)", a: () => openWindow("ccompteg") },
-      { l: "📓 Journaux SNEL (CJOURNAL)",      a: () => openWindow("cjournal") },
-      { l: "📔 Journaux TomPro (CJNL)",        a: () => openWindow("cjnl") },
-      { l: "🏷️ Code Gestionnaire (CGESTIONN)", a: () => openWindow("cgestionn") },
-      { l: "🏢 Unité Budgétaire (CSR)",        a: () => openWindow("csr") },
+      { l: "📓 Journaux SNEL (CJOURNAL)",           a: () => openWindow("cjournal") },
+      { l: "📔 Journaux TomPro (CJNL)",             a: () => openWindow("cjnl") },
+      { l: "🏷️ Code Gestionnaire (CGESTIONN)",      a: () => openWindow("cgestionn") },
+      { l: "🏢 Unité Budgétaire (CSR)",             a: () => openWindow("csr") },
     ],
     Traitement: [
       { l: "⚡ Lancer le Traitement", a: () => openWindow("traitement") },
     ],
     Administration: [
-      { l: "👤 Gestion Utilisateurs",    a: () => openWindow("users") },
-      { l: "⚙️ Configuration BDD",       a: () => openWindow("dbconfig") },
+      { l: "👤 Gestion Utilisateurs", a: () => openWindow("users") },
+      { l: "⚙️ Configuration BDD",    a: () => openWindow("dbconfig") },
+      { l: "📋 Journal d'Audit",      a: () => openWindow("tracabilite") },
     ],
   };
 
   return (
     <div className="shell" onClick={() => setOpenMenu(null)}>
-
-      {/* BARRE DE MENU GLOBALE */}
       <div className="global-menu" onClick={e => e.stopPropagation()}>
-        <div className="global-menu-brand">
-          <span style={{ fontSize: 15 }}>🔄</span> Moulinette TomPro → SNEL
-        </div>
+        <div className="global-menu-brand"><span style={{ fontSize: 15 }}>🔄</span> Moulinette TomPro → SNEL</div>
         {Object.entries(MENUS).map(([name, items]) => (
           <div key={name} style={{ position: "relative" }}>
-            <button className={`menu-btn${openMenu === name ? " open" : ""}`}
-              onClick={() => setOpenMenu(openMenu === name ? null : name)}>
-              {name}
-            </button>
+            <button className={`menu-btn${openMenu === name ? " open" : ""}`} onClick={() => setOpenMenu(openMenu === name ? null : name)}>{name}</button>
             {openMenu === name && (
               <div className="dropdown">
-                {items.map(it => (
-                  <button key={it.l} className="dd-item" onClick={it.a}>{it.l}</button>
-                ))}
+                {items.map(it => <button key={it.l} className="dd-item" onClick={it.a}>{it.l}</button>)}
               </div>
             )}
           </div>
         ))}
         <div style={{ marginLeft: "auto", display: "flex", alignItems: "center", gap: 10 }}>
+          {audit.length > 0 && (
+            <span style={{ fontSize: 10, color: "#5D5D5D", background: "rgba(0,95,184,0.07)", padding: "2px 8px", borderRadius: 3, cursor: "pointer" }}
+              onClick={() => openWindow("tracabilite")}>
+              📋 {audit.length} événement{audit.length > 1 ? "s" : ""}
+            </span>
+          )}
           <Badge label={currentUser?.role} bg={currentUser?.role === "ADMIN" ? "#FBEBE9" : "#E6F1FB"} color={currentUser?.role === "ADMIN" ? "#710F0F" : "#003E7E"} />
           <span style={{ fontSize: 11, color: "#5D5D5D" }}>{currentUser?.nom}</span>
         </div>
       </div>
-
-      {/* BUREAU MDI */}
       <div className="desktop">
         {windows.length === 0 && (
-          <div className="desktop-hint">
-            <div className="ico">🔄</div>
-            <p>Utilisez le menu pour ouvrir des fenêtres</p>
-          </div>
+          <div className="desktop-hint"><div className="ico">🔄</div><p>Utilisez le menu pour ouvrir des fenêtres</p></div>
         )}
         {windows.map(w => {
           const def = WIN_DEFS[w.key];
@@ -1332,14 +1460,11 @@ function App() {
           );
         })}
       </div>
-
-      {/* BARRE DES TÂCHES */}
       <div className="taskbar">
         {windows.map(w => {
           const def = WIN_DEFS[w.key];
           return (
-            <button key={w.key} className={`task-btn${focusedId === w.key ? " active" : ""}`}
-              onClick={() => setFocusedId(w.key)}>
+            <button key={w.key} className={`task-btn${focusedId === w.key ? " active" : ""}`} onClick={() => setFocusedId(w.key)}>
               <span style={{ fontSize: 14, flexShrink: 0 }}>{def.icon}</span>
               <span className="task-btn-label">{def.title.split(" — ")[0]}</span>
               <span className="task-close" onClick={e => { e.stopPropagation(); closeWindow(w.key); }}>✕</span>
